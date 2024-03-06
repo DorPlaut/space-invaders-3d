@@ -33,11 +33,17 @@ class Bullet {
           true
         );
         if (intersects.length > 0) {
+          // * bug. somthimse detect collision on bullet exit screen - temporery solution  *
+          // * detect false hit
+          const flaseHit = intersects[0].distance > 1;
+          // * end
           // update enemy
-          enemy.gotHit = true;
-          enemy.pixelArt.gotHit = true;
+          if (!flaseHit) {
+            this.hasCollided = true;
+            enemy.gotHit = true;
+            enemy.pixelArt.gotHit = true;
+          }
           // update bullet
-          this.hasCollided = true;
         }
       }
     }

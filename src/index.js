@@ -38,7 +38,8 @@ camera.position.set(0, 0, 50);
 // enemies
 let levelX = 5;
 let levelY = 2;
-let level = new Level(camera, scene, levelX, levelY);
+let levelSpeed = 2000;
+let level = new Level(camera, scene, levelX, levelY, levelSpeed);
 scene.add(level.mesh);
 
 // Player
@@ -61,9 +62,13 @@ const resetLevel = () => {
 const startLevel = () => {
   // increase levelX and levelY
   levelX += 1;
-  levelY += 1;
+  if (levelY < 4) levelY += 1;
+  // reduce speed interval
+  if (levelSpeed > 600) levelSpeed -= 100;
+  if (levelSpeed > 200) levelSpeed -= 50;
+
   // Create a new level
-  level = new Level(camera, scene, levelX, levelY);
+  level = new Level(camera, scene, levelX, levelY, levelSpeed);
   scene.add(level.mesh);
   level.player = player;
   // update player data

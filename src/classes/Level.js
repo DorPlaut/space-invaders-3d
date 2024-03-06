@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import Enemy from './Enemy';
 // level
 class Level {
-  constructor(camera, scene, gridWidth = 10, gridHeight = 3) {
+  constructor(camera, scene, gridWidth = 10, gridHeight = 3, speed = 1000) {
     this.scene = scene;
     this.camera = camera;
     this.player = null;
@@ -15,10 +15,17 @@ class Level {
     this.enemies = [];
     this.mesh = new THREE.Group();
     this.addEnemies();
+    this.centerX = null;
     this.centerMesh();
 
     // level logic
     this.levelCleard = false;
+
+    // animation
+    this.isAnimated = true;
+    this.animationInterval = null;
+    this.speed = speed;
+    this.animate();
   }
   // create the grid
   initializeGrid() {
@@ -41,9 +48,17 @@ class Level {
       row.map((cell, j) => {
         const vericalSpace = i * 2;
         const horizontalSpace = j * 2;
-        i % 2 == 0
-          ? this.addEnemy(horizontalSpace, vericalSpace, 0, 1)
-          : this.addEnemy(horizontalSpace, vericalSpace, 0, 2);
+        console.log(i);
+        i === 0 && this.addEnemy(horizontalSpace, vericalSpace, 0, 'squid');
+        i >= 1 &&
+          i < 3 &&
+          this.addEnemy(horizontalSpace, vericalSpace, 0, 'crab');
+        i >= 3 && this.addEnemy(horizontalSpace, vericalSpace, 0, 'octopus');
+        // i % 2 == 0
+        //   ? this.addEnemy(horizontalSpace, vericalSpace, 0, 'squid')
+        //   : this.addEnemy(horizontalSpace, vericalSpace, 0, 'crab');
+        // : this.addEnemy(horizontalSpace, vericalSpace, 0, 'octopus'
+        // );
       });
     });
   }
@@ -57,10 +72,53 @@ class Level {
     this.mesh.children.forEach((child) => {
       totalX += child.position.x;
     });
-    const centerX = totalX / this.mesh.children.length;
-    this.mesh.position.x = -centerX;
+    this.centerX = totalX / this.mesh.children.length;
+    this.mesh.position.x = -this.centerX;
     this.mesh.position.y = 1;
   }
+
+  // animate the enemies
+  animate = () => {
+    if (this.isAnimated && this.animationInterval === null) {
+      let moveRight = true;
+      let moveDown = false;
+      let moveCounter = 0;
+
+      this.animationInterval = setInterval(() => {
+        const centerX = this.centerX + this.mesh.position.x;
+        const range = 2;
+
+        // change side and move down
+        if (moveRight && centerX >= range) {
+          this.mesh.position.y -= 0.5;
+          moveRight = false;
+          moveDown = false;
+          moveCounter++; // Increment counter
+        }
+        // If moving left and reached -range, move down and switch direction
+        else if (!moveRight && centerX <= -range) {
+          this.mesh.position.y -= 0.5;
+          moveRight = true;
+          moveDown = false;
+          moveCounter++; // Increment counter
+        }
+        // If not moving down, adjust x position based on direction
+        else if (!moveDown) {
+          if (moveRight) this.mesh.position.x += 0.5;
+          else this.mesh.position.x -= 0.5;
+        }
+
+        // After moving right and left twice, reset the counter
+        if (moveCounter >= 2) {
+          moveCounter = 0;
+        }
+      }, this.speed);
+    }
+    if (!this.isAnimated) {
+      clearInterval(this.animationInterval);
+      this.animationInterval = null;
+    }
+  };
 
   update() {
     // check if all the enemies are dead by checking if they have a mesh
