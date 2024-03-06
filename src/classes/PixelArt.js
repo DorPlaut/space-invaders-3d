@@ -9,7 +9,7 @@ class PixelArt {
     pixelSpacing,
     color,
     duration = 1500,
-    isAnimted = true
+    isAnimted = false
   ) {
     this.customCoords = customCoordsPos1;
     this.customCoordsPos1 = customCoordsPos1;
@@ -20,12 +20,15 @@ class PixelArt {
 
     this.duration = duration;
     this.isAnimated = isAnimted;
+    this.animationInterval = null;
+
+    this.gotHit = false;
 
     // Create mesh
     this.mesh = this.createPixelArt();
 
     // Animate mesh
-    if (this.isAnimated) this.animate();
+    // if (this.isAnimated) this.animate();
 
     // center mesh
     const centerOffset =
@@ -87,16 +90,49 @@ class PixelArt {
     }
 
     this.mesh.remove(...this.mesh.children);
-    this.mesh.add(this.createPixelArt());
+    this.mesh.add(...this.createPixelArt().children);
   }
 
+  //
+
   animate = () => {
-    const animationInterval = setInterval(() => {
-      this.updatePixelArt();
-    }, this.duration);
+    if (this.isAnimated && this.animationInterval === null) {
+      this.animationInterval = setInterval(() => {
+        this.updatePixelArt();
+      }, this.duration);
+    }
+    if (!this.isAnimated) {
+      clearInterval(this.animationInterval);
+      this.animationInterval = null;
+    }
   };
 
-  update() {}
+  update() {
+    // console.log(this.gotHit);
+    if (this.gotHit) {
+      clearInterval(this.animationInterval);
+      this.isAnimated = false;
+      // Iterate over each pixel in the mesh
+      this.mesh.children.forEach((pixel) => {
+        // Define a random direction and speed for the explosion
+        const direction = new THREE.Vector3(
+          Math.random() - 0.5,
+          Math.random() - 0.5,
+          Math.random() - 0.5
+        ).normalize();
+        const speed = Math.random() * 5; // Adjust speed as needed
+
+        // Update the pixel's position
+        pixel.position.add(direction.multiplyScalar(speed));
+
+        // Check if the pixel is out of the screen
+        if (pixel.position.length() > 10) {
+          this.mesh.remove(pixel);
+        }
+      });
+    }
+    this.animate();
+  }
 }
 
 export default PixelArt;

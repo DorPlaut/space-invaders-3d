@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import Player from './classes/Player.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import GameGrid from './classes/GameGrid.js';
+import Level from './classes/Level.js';
 import Enemy from './classes/Enemy.js';
 import Bullet from './classes/Bullet.js';
 
@@ -17,6 +17,12 @@ const camera = new THREE.PerspectiveCamera(
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
+// update window size on resize
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
 
 // controls
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -26,30 +32,56 @@ const ambientLight = new THREE.AmbientLight(0xffffff, 1);
 scene.add(ambientLight);
 
 // Position the camera
-// camera.position.z = 5;
 camera.position.set(0, 0, 50);
 
-const gameGrid = new GameGrid();
-scene.add(gameGrid.mesh);
+// MODELS and OBJECTS
+// enemies
+let levelX = 5;
+let levelY = 2;
+let level = new Level(camera, scene, levelX, levelY);
+scene.add(level.mesh);
 
 // Player
-const player = new Player(scene, (mesh) => {
-  player.mesh.position.set(0, -6, 0);
-
-  scene.add(mesh);
-});
-
-// bullet
-// const bullet = new Bullet();
-// scene.add(bullet.mesh);
-
+let player;
+const createPlayer = () => {
+  player = new Player(scene, level, (mesh) => {
+    player.mesh.position.set(0, -6, 0);
+    scene.add(mesh);
+    level.player = player;
+  });
+};
+createPlayer();
 //
+
+// reaset and start new level
+const resetLevel = () => {
+  scene.remove(level);
+};
+
+const startLevel = () => {
+  // increase levelX and levelY
+  levelX += 1;
+  levelY += 1;
+  // Create a new level
+  level = new Level(camera, scene, levelX, levelY);
+  scene.add(level.mesh);
+  level.player = player;
+  // update player data
+  player.level = level;
+};
 // Game loop (animation)
 const animate = () => {
   requestAnimationFrame(animate);
   // update elements
   player.update();
-  gameGrid.update();
+  level.update();
+
+  // create now level when level is cleared
+  // Check if the current level is cleared
+  if (level.levelCleard) {
+    resetLevel();
+    if (!scene.level) startLevel();
+  }
   // render scene
   renderer.render(scene, camera);
 };

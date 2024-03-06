@@ -3,13 +3,45 @@ import { degToRad, radToDeg } from '../utils.js';
 import PixelArt from './PixelArt.js';
 
 class Enemy {
-  constructor(enemyType = 1) {
+  constructor(camera, scene, enemyType = 1) {
+    this.scene = scene;
+    this.camera = camera;
+    this.player = null;
+    this.pixelArt = null;
+    this.mesh = new THREE.Group();
     if (enemyType === 1) this.pixelArt = this.createEnemyType1();
     if (enemyType === 2) this.pixelArt = this.createEnemyType2();
-    this.mesh = new THREE.Group();
-    this.mesh.add(this.pixelArt.mesh);
-    // this.mesh = this.createEnemyType1();
+    // collisions
+    this.collisionMesh = null;
+    this.gotHit = false;
   }
+
+  createCollisionMesh(coords, pixelSize) {
+    const width = coords.reduce((max, coord) => {
+      return Math.max(max, coord.x);
+    }, 0);
+    const height = coords.reduce((max, coord) => {
+      return Math.max(max, coord.y);
+    }, 0);
+    // handle collision mesh
+    // Create a bounding box for collision detection
+    const colGeometry = new THREE.BoxGeometry(
+      width * pixelSize,
+      height * pixelSize,
+      pixelSize
+    );
+    const colMaterial = new THREE.MeshBasicMaterial({
+      color: 0x332200,
+      visible: false,
+    });
+    const collisionMesh = new THREE.Mesh(colGeometry, colMaterial);
+    collisionMesh.position.x -= pixelSize / 2;
+    collisionMesh.position.y += pixelSize / 2;
+    // Set the collision mesh in the Enemy instance
+    this.mesh.add(collisionMesh);
+    this.collisionMesh = collisionMesh;
+  }
+
   createEnemyType1 = () => {
     const customCoordsPos1 = [
       { x: 3, y: 1 },
@@ -117,12 +149,12 @@ class Enemy {
       customCoordsPos2,
       pixelSize,
       pixelSpacing,
-      color
+      color,
+      1000,
+      true
     );
-    // fix this!
-    // pixelArt.update();
-    const mesh = new THREE.Group();
-    mesh.add(pixelArt.mesh);
+    this.mesh.add(pixelArt.mesh);
+    this.createCollisionMesh(customCoordsPos1, pixelSize);
     return pixelArt;
   };
 
@@ -235,18 +267,16 @@ class Enemy {
       pixelSize,
       pixelSpacing,
       color,
-      2000,
+      1500,
       true
     );
-    // fix this!
-    // pixelArt.update();
-    const mesh = new THREE.Group();
-    mesh.add(pixelArt.mesh);
+    this.mesh.add(pixelArt.mesh);
+    this.createCollisionMesh(customCoordsPos1, pixelSize);
     return pixelArt;
   };
 
   update() {
-    this.pixelArt.update();
+    // this.pixelArt.update();
   }
 }
 

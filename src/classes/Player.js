@@ -4,8 +4,9 @@ import { degToRad, radToDeg } from '../utils.js';
 import Bullet from './Bullet.js';
 
 class Player {
-  constructor(scene, onModelLoaded) {
+  constructor(scene, level, onModelLoaded) {
     this.scene = scene;
+    this.level = level;
     this.mesh = null;
     this.position = new THREE.Vector3(0, 0, 0);
     // Load the model
@@ -53,7 +54,9 @@ class Player {
   // shooting
   fireBullet() {
     if (!this.iShooting) return;
-    this.bullets.push(new Bullet());
+    this.bullets.push(
+      new Bullet(this.level, this.bullets, this.bullets.length)
+    );
     const bullet = this.bullets[this.bullets.length - 1];
     bullet.mesh.position.set(
       this.mesh.position.x,
@@ -133,7 +136,7 @@ class Player {
       this.bullets[index].update();
       // remove bullet when its out of screen
       const bulletPosY = this.bullets[index].mesh.position.y;
-      if (bulletPosY > 20) {
+      if (bulletPosY > 20 || bullet.hasCollided) {
         // remove from array
         this.bullets.splice(index, 1);
         // remove from scene
