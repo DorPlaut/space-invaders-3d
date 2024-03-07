@@ -7,7 +7,9 @@ class Player {
   constructor(scene, level, onModelLoaded) {
     this.scene = scene;
     this.level = level;
+    this.collisionMesh = null;
     this.mesh = null;
+    this.gotHit = false;
     this.position = new THREE.Vector3(0, 0, 0);
     // Load the model
     this.loadModel(onModelLoaded);
@@ -40,6 +42,7 @@ class Player {
         this.mesh.position.copy(this.position); // Set initial position
         if (onModelLoaded) {
           onModelLoaded(this.mesh);
+          this.createCollisionMesh();
         }
       },
       (xhr) => {
@@ -50,6 +53,21 @@ class Player {
       }
     );
   }
+  // collision box
+  createCollisionMesh = () => {
+    // Create a bounding box for collision detection
+    const width = 400;
+    const height = 600;
+    const colGeometry = new THREE.BoxGeometry(width, 300, height);
+    const colMaterial = new THREE.MeshBasicMaterial({
+      color: 0xff0000, // #ff0000
+      visible: false,
+    });
+    const collisionMesh = new THREE.Mesh(colGeometry, colMaterial);
+    //  set collision mesh
+    this.mesh.add(collisionMesh);
+    this.collisionMesh = collisionMesh;
+  };
 
   // shooting
   fireBullet() {

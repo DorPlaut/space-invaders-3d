@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import Enemy from './Enemy';
+import Bullet from './Bullet';
 // level
 class Level {
   constructor(camera, scene, gridWidth = 10, gridHeight = 3, speed = 1000) {
@@ -16,15 +17,19 @@ class Level {
     this.mesh = new THREE.Group();
     this.addEnemies();
     this.centerX = null;
-    this.centerMesh();
 
     // level logic
     this.levelCleard = false;
+
+    // shooting
+    this.bullets = [];
+    this.iShooting = false;
 
     // animation
     this.isAnimated = true;
     this.animationInterval = null;
     this.speed = speed;
+    this.centerMesh();
     this.animate();
   }
   // create the grid
@@ -34,6 +39,7 @@ class Level {
       .map(() => new Array(this.gridWidth).fill(0));
   }
 
+  // Create Enemy
   addEnemy(x, y, z, type) {
     this.enemies.push(new Enemy(this.camera, this.scene, type));
     const enemy = this.enemies[this.enemies.length - 1];
@@ -42,28 +48,45 @@ class Level {
     enemy.mesh.scale.multiplyScalar(0.1);
     this.mesh.add(enemy.mesh);
   }
-  // add all enemies
+  // Add all enemies
   addEnemies() {
     this.grid.map((row, i) => {
       row.map((cell, j) => {
         const vericalSpace = i * 2;
         const horizontalSpace = j * 2;
-        console.log(i);
         i === 0 && this.addEnemy(horizontalSpace, vericalSpace, 0, 'squid');
         i >= 1 &&
           i < 3 &&
           this.addEnemy(horizontalSpace, vericalSpace, 0, 'crab');
         i >= 3 && this.addEnemy(horizontalSpace, vericalSpace, 0, 'octopus');
-        // i % 2 == 0
-        //   ? this.addEnemy(horizontalSpace, vericalSpace, 0, 'squid')
-        //   : this.addEnemy(horizontalSpace, vericalSpace, 0, 'crab');
-        // : this.addEnemy(horizontalSpace, vericalSpace, 0, 'octopus'
-        // );
       });
     });
   }
 
-  // remove enemy
+  // shoot bullets
+  // shooting
+  fireBullet = () => {
+    // if (!this.iShooting) return;
+    this.bullets.push(
+      new Bullet(this, this.bullets, this.bullets.length, 'enemy')
+    );
+    const bullet = this.bullets[this.bullets.length - 1];
+    // get list of enemies thet didnt got hit
+    const aliveEnemies = this.enemies.filter((enemy) => enemy.gotHit === false);
+    const randomIndex = Math.floor(Math.random() * aliveEnemies.length);
+    const randomEnemy = aliveEnemies[randomIndex];
+
+    if (randomEnemy) {
+      bullet.mesh.position.set(
+        randomEnemy.mesh.position.x + this.mesh.position.x,
+        randomEnemy.mesh.position.y + 1,
+        randomEnemy.mesh.position.z
+      );
+      this.scene.add(bullet.mesh);
+    }
+
+    this.iShooting = false; // Reset shooting flag
+  };
 
   // center the grid
   centerMesh() {
@@ -85,12 +108,22 @@ class Level {
       let moveCounter = 0;
 
       this.animationInterval = setInterval(() => {
+        // shoot
+        const shootingInterval = setTimeout(() => {
+          console.log('bullet');
+          this.fireBullet();
+          clearInterval(shootingInterval);
+        }, this.speed * 0.5);
+        // move
         const centerX = this.centerX + this.mesh.position.x;
         const range = 2;
+        //
 
+        //
         // change side and move down
         if (moveRight && centerX >= range) {
           this.mesh.position.y -= 0.5;
+
           moveRight = false;
           moveDown = false;
           moveCounter++; // Increment counter
@@ -104,8 +137,11 @@ class Level {
         }
         // If not moving down, adjust x position based on direction
         else if (!moveDown) {
-          if (moveRight) this.mesh.position.x += 0.5;
-          else this.mesh.position.x -= 0.5;
+          if (moveRight) {
+            this.mesh.position.x += 0.5;
+          } else {
+            this.mesh.position.x -= 0.5;
+          }
         }
 
         // After moving right and left twice, reset the counter
@@ -121,8 +157,22 @@ class Level {
   };
 
   update() {
+    // Update bullets
+    this.bullets.map((bullet, index) => {
+      this.bullets[index].update();
+      // remove bullet when its out of screen
+      const bulletPosY = this.bullets[index].mesh.position.y;
+      if (bulletPosY < -20 || bullet.hasCollided) {
+        // remove from array
+        this.bullets.splice(index, 1);
+        // remove from scene
+        this.scene.remove(bullet.mesh);
+      }
+    });
     // check if all the enemies are dead by checking if they have a mesh
     if (this.mesh.children.length == 0) {
+      clearInterval(this.animationInterval);
+
       this.levelCleard = true;
     }
     // if (this.player) console.log(this.player.bullets);

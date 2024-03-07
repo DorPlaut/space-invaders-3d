@@ -61,7 +61,7 @@ const resetLevel = () => {
 
 const startLevel = () => {
   // increase levelX and levelY
-  levelX += 1;
+  if (levelX < 9) levelX += 1;
   if (levelY < 4) levelY += 1;
   // reduce speed interval
   if (levelSpeed > 600) levelSpeed -= 100;
