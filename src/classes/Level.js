@@ -79,7 +79,7 @@ class Level {
     if (randomEnemy) {
       bullet.mesh.position.set(
         randomEnemy.mesh.position.x + this.mesh.position.x,
-        randomEnemy.mesh.position.y + 1,
+        randomEnemy.mesh.position.y + this.mesh.position.y,
         randomEnemy.mesh.position.z
       );
       this.scene.add(bullet.mesh);
