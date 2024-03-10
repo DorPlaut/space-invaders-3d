@@ -301,10 +301,10 @@ class Player {
     this.lifeBar.map((life, index) => {
       this.lifeBar[index].update();
     });
-    if (this.lives <= 0) {
-      // disable shootimg
-      this.iShooting = true;
-    }
+    // if (this.lives <= 0) {
+    //   // disable shootimg
+    //   this.iShooting = true;
+    // }
   }
   // end game
 }
