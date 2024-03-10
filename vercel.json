@@ -1,9 +1,10 @@
 {
   "version": 2,
+
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "dist/bundle.js"
+      "dest": "/public/index.html"
     }
   ]
 }
