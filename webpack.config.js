@@ -3,12 +3,11 @@ const path = require('path');
 const mode = process.env.NODE_ENV || 'development';
 
 module.exports = {
-  mode: mode,
-  devtool: 'source-map',
+  mode: 'production', // Set to "production"
   entry: './public/index.js',
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'public/dist'),
+    path: path.resolve(__dirname, 'dist'),
   },
   module: {
     rules: [
@@ -18,6 +17,7 @@ module.exports = {
       },
     ],
   },
+
   // devServer: {
   //   static: {
   //     directory: path.join(__dirname, 'src'),
