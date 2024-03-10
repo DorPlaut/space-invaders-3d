@@ -10,15 +10,15 @@ class Text {
     this.createMesh();
   }
 
-  createMesh = () => {
+  createMesh = async () => {
     const loader = new FontLoader();
     const text = this.text;
     let geometry;
-    loader.load('fonts/Pixelify Sans_Regular.json', function (font) {
+    await loader.load('fonts/Pixelify Sans_Regular.json', function (font) {
       geometry = new TextGeometry('HELLLOOO', {
         font: font,
         size: 100,
-        height: 5,
+        height: 100,
         curveSegments: 12,
         bevelEnabled: true,
         bevelThickness: 10,
@@ -29,6 +29,7 @@ class Text {
     });
     const material = new THREE.MeshBasicMaterial({ color: 0xffffff }); // #ffffff
     this.mesh = new THREE.Mesh(geometry, material);
+    console.log(this.mesh);
     this.scene.add(this.mesh);
     // return mesh;
   };

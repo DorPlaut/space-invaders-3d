@@ -78,26 +78,28 @@ class Player {
 
   // shooting
   fireBullet() {
-    const currentTime = Date.now();
-    if (
-      !this.iShooting ||
-      currentTime - this.lastShotTime < this.shootingCooldown
-    )
-      return;
+    if (this.lives > 0) {
+      const currentTime = Date.now();
+      if (
+        !this.iShooting ||
+        currentTime - this.lastShotTime < this.shootingCooldown
+      )
+        return;
 
-    this.bullets.push(
-      new Bullet(this.level, this.bullets, this.bullets.length)
-    );
-    const bullet = this.bullets[this.bullets.length - 1];
-    bullet.mesh.position.set(
-      this.mesh.position.x,
-      this.mesh.position.y,
-      this.mesh.position.z
-    );
-    this.scene.add(bullet.mesh);
+      this.bullets.push(
+        new Bullet(this.level, this.bullets, this.bullets.length)
+      );
+      const bullet = this.bullets[this.bullets.length - 1];
+      bullet.mesh.position.set(
+        this.mesh.position.x,
+        this.mesh.position.y,
+        this.mesh.position.z
+      );
+      this.scene.add(bullet.mesh);
 
-    this.iShooting = false;
-    this.lastShotTime = currentTime;
+      this.iShooting = false;
+      this.lastShotTime = currentTime;
+    }
   }
 
   //
@@ -299,7 +301,12 @@ class Player {
     this.lifeBar.map((life, index) => {
       this.lifeBar[index].update();
     });
+    if (this.lives <= 0) {
+      // disable shootimg
+      this.iShooting = true;
+    }
   }
+  // end game
 }
 
 export default Player;

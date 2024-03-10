@@ -77,6 +77,7 @@ const startLevel = () => {
 };
 // titles and text
 const title = new Text(scene, 'HLELLO WORLDL');
+// scene.add(title.mesh);
 
 // Game loop (animation)
 const animate = () => {
@@ -93,6 +94,7 @@ const animate = () => {
   }
   if (player.lives == 0) {
     scene.remove(player.mesh);
+    // scene.remove(level.mesh);
     clearInterval(level.animationInterval);
     console.log('GAME OVER');
   }
