@@ -4,6 +4,7 @@ const mode = process.env.NODE_ENV || 'development';
 
 module.exports = {
   mode: mode,
+  devtool: 'source-map',
   entry: './public/index.js',
   output: {
     filename: 'bundle.js',
