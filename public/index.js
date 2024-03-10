@@ -4,6 +4,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import Level from './classes/Level.js';
 import Enemy from './classes/Enemy.js';
 import Bullet from './classes/Bullet.js';
+import Text from './classes/Text.js';
 
 // Set up the scene, camera, and renderer
 const scene = new THREE.Scene();
@@ -74,6 +75,9 @@ const startLevel = () => {
   // update player data
   player.level = level;
 };
+// titles and text
+const title = new Text(scene, 'HLELLO WORLDL');
+
 // Game loop (animation)
 const animate = () => {
   requestAnimationFrame(animate);
@@ -86,6 +90,11 @@ const animate = () => {
   if (level.levelCleard) {
     resetLevel();
     if (!scene.level) startLevel();
+  }
+  if (player.lives == 0) {
+    scene.remove(player.mesh);
+    clearInterval(level.animationInterval);
+    console.log('GAME OVER');
   }
   // render scene
   renderer.render(scene, camera);

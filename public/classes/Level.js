@@ -110,7 +110,7 @@ class Level {
       this.animationInterval = setInterval(() => {
         // shoot
         const shootingInterval = setTimeout(() => {
-          console.log('bullet');
+          // console.log('bullet');
           this.fireBullet();
           clearInterval(shootingInterval);
         }, this.speed * 0.5);

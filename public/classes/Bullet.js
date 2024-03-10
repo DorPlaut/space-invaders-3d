@@ -67,7 +67,7 @@ class Bullet {
         if (!flaseHit) {
           console.log('bullet hit the player');
           this.hasCollided = true;
-          this.level.player.gotHit = true;
+          this.level.player.gotHit();
           this.hasCollided = true;
         }
       }
