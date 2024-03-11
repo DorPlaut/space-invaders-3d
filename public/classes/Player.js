@@ -125,7 +125,7 @@ class Player {
       heart.position.set(posX, 0, 0);
     });
     // this.lifeBarMesh.add(heart);
-    this.lifeBarMesh.position.set(5, -7.5, 0);
+    this.lifeBarMesh.position.set(1, -7.5, 0);
     this.lifeBarMesh.scale.multiplyScalar(0.1);
   };
   // create heart and add life
