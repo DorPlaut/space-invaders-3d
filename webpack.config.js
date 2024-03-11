@@ -1,9 +1,11 @@
 const path = require('path');
+const webpack = require('webpack');
 
 const mode = process.env.NODE_ENV || 'development';
 
 module.exports = {
-  mode: 'production', // Set to "production"
+  mode: 'development',
+  // mode: mode,
   entry: './public/index.js',
   output: {
     filename: 'bundle.js',
@@ -17,12 +19,12 @@ module.exports = {
       },
     ],
   },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'public'),
+    },
 
-  // devServer: {
-  //   static: {
-  //     directory: path.join(__dirname, 'src'),
-  //   },
-  //   compress: true,
-  //   port: 9000,
-  // },
+    compress: true,
+    port: 9000,
+  },
 };

@@ -4,6 +4,7 @@
   "description": "a 3d space invaders clone",
   "main": "index.js",
   "scripts": {
+    "serve": "webpack-dev-server --hot",
     "start": "node api/index.js",
     "dev": "webpack serve --open",
     "build": "webpack --config webpack.config.js",
@@ -18,5 +19,8 @@
     "three": "^0.162.0",
     "webpack": "^5.90.3",
     "webpack-cli": "^5.1.4"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^5.0.2"
   }
 }

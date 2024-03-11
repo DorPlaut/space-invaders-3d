@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { degToRad, radToDeg } from '../utils.js';
+import FakeGlowMaterial from '../materials/FakeGlowMaterial.js';
 
 class Bullet {
   constructor(level, bullets, index, type = 'player') {
@@ -7,16 +8,32 @@ class Bullet {
     this.bullets = bullets;
     this.bulletIndex = index;
     this.type = type;
+    this.color = type === 'player' ? 0x30bdff : 0xff0101; //#30bdff #ff0101
     this.mesh = new THREE.Mesh(
       new THREE.BoxGeometry(0.2, 0.2, 0.2),
+      // new THREE.SphereGeometry(0.2, 32, 16),
       new THREE.MeshBasicMaterial({
-        color: type === 'player' ? 0xffffff : 0xdb0909,
-      }) // #db0909
+        color: this.color,
+      })
     );
     this.speed = 0.5;
     // collision
     this.raycaster = new THREE.Raycaster();
     this.hasCollided = false;
+    // glow mesh
+    // this.glowMesh = new THREE.Mesh(
+    //   new THREE.SphereGeometry(0.5, 32, 16),
+    //   new FakeGlowMaterial({
+    //     falloff: 0.2,
+    //     glowInternalRadius: 10,
+    //     glowColor: this.color,
+    //     glowSharpness: 0,
+    //     opacity: 1,
+    //     side: THREE.FrontSide,
+    //     depthTest: true,
+    //   })
+    // );
+    // this.mesh.add(this.glowMesh);
   }
 
   update() {
@@ -48,7 +65,7 @@ class Bullet {
             const flaseHit = intersects[0].distance > 1;
             // * end
             // update enemy
-            if (!flaseHit) {
+            if (!flaseHit && enemy) {
               this.hasCollided = true;
               enemy.gotHit = true;
               enemy.pixelArt.gotHit = true;
@@ -64,7 +81,7 @@ class Bullet {
 
       if (intersects.length > 0) {
         const flaseHit = intersects[0].distance > 1;
-        if (!flaseHit) {
+        if (!flaseHit && this.level.player.lives > 0) {
           console.log('bullet hit the player');
           this.hasCollided = true;
           this.level.player.gotHit();

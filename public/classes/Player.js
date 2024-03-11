@@ -238,7 +238,7 @@ class Player {
         this.isRotating = true;
         this.targetRotationZ = this.maxRotationAngle;
         break;
-      case 'spaceBar':
+      case ' ':
       case 'e':
       case 'E':
         this.iShooting = true;
@@ -259,11 +259,45 @@ class Player {
         this.isRotating = false;
         this.targetRotationZ = 0;
         break;
-      case 'spaceBar':
+      case ' ':
       case 'e':
       case 'E':
         this.iShooting = false;
         break;
+    }
+  }
+  // Method to simulate pressing a key
+  simulateKeyPress(key) {
+    // console.log('okey key');
+    switch (key) {
+      case 'ArrowLeft':
+      case 'ArrowRight':
+        this.isRotating = true;
+        this.targetRotationZ =
+          key === 'ArrowLeft' ? -this.maxRotationAngle : this.maxRotationAngle;
+        break;
+      case 'Space':
+        this.iShooting = true;
+        this.fireBullet();
+        break;
+      default:
+        console.error(`Unsupported key: ${key}`);
+    }
+  }
+
+  // Method to simulate releasing a key
+  simulateKeyRelease(key) {
+    switch (key) {
+      case 'ArrowLeft':
+      case 'ArrowRight':
+        this.isRotating = false;
+        this.targetRotationZ = 0;
+        break;
+      case 'Space':
+        this.iShooting = false;
+        break;
+      default:
+        console.error(`Unsupported key: ${key}`);
     }
   }
 

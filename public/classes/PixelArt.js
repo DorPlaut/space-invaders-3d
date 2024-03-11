@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { degToRad, radToDeg } from '../utils.js';
+import FakeGlowMaterial from '../materials/FakeGlowMaterial.js';
 
 class PixelArt {
   constructor(
@@ -9,7 +10,8 @@ class PixelArt {
     pixelSpacing,
     color,
     duration = 1500,
-    isAnimted = false
+    isAnimted = false,
+    isGlowing = false
   ) {
     this.customCoords = customCoordsPos1;
     this.customCoordsPos1 = customCoordsPos1;
@@ -17,6 +19,7 @@ class PixelArt {
     this.pixelSize = pixelSize;
     this.pixelSpacing = pixelSpacing;
     this.color = color;
+    this.isGlowing = isGlowing;
 
     this.duration = duration;
     this.isAnimated = isAnimted;
@@ -57,7 +60,23 @@ class PixelArt {
       this.pixelSize,
       this.pixelSize
     );
-    const material = new THREE.MeshBasicMaterial({ color: this.color });
+    const material = new THREE.MeshStandardMaterial({ color: this.color });
+    let glowMesh;
+    if (this.isGlowing) {
+      glowMesh = new THREE.Mesh(
+        new THREE.SphereGeometry(this.pixelSize * 5, 32, 16),
+        new FakeGlowMaterial({
+          falloff: 0.0,
+          glowInternalRadius: 10.0,
+          glowColor: this.color,
+          glowSharpness: 0.5,
+          opacity: 0.06,
+          side: THREE.FrontSide,
+          depthTest: true,
+        })
+      );
+    }
+    // this.mesh.add(this.glowMesh);
 
     for (let i = 0; i < width; i++) {
       for (let j = 0; j < height; j++) {
@@ -73,6 +92,7 @@ class PixelArt {
             j * (1 + this.pixelSpacing),
             0
           );
+          this.isGlowing && pixel.add(glowMesh.clone());
           mesh.add(pixel);
         }
       }

@@ -30,6 +30,11 @@ const controls = new OrbitControls(camera, renderer.domElement);
 
 // Set up lights (ambient, directional, etc.)
 const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+const light = new THREE.DirectionalLight(0xffffff, 3);
+light.position.set(-10, 3, -1);
+const light2 = new THREE.DirectionalLight(0xffffff, 1);
+light2.position.set(10, -3, -1);
+scene.add(light, light2);
 scene.add(ambientLight);
 
 // Position the camera
@@ -76,7 +81,7 @@ const startLevel = () => {
   player.level = level;
 };
 // titles and text
-const title = new Text(scene, 'HLELLO WORLDL');
+// const title = new Text(scene, 'HLELLO WORLDL');
 // scene.add(title.mesh);
 
 // Game loop (animation)
@@ -92,6 +97,12 @@ const animate = () => {
     resetLevel();
     if (!scene.level) startLevel();
   }
+
+  // // check if player is dead
+  // if (player.gotHit) {
+  //   player.gotHit = false;
+  //   player.lives -= 1;
+  // }
   if (player.lives == 0) {
     scene.remove(player.mesh);
     // scene.remove(level.mesh);
@@ -103,4 +114,61 @@ const animate = () => {
 };
 animate();
 
+// Create buttons for mobile controls
+const buttonContainer = document.createElement('div');
+buttonContainer.id = 'button-container';
+document.body.appendChild(buttonContainer);
+const buttonContainerInner = document.createElement('div');
+buttonContainerInner.id = 'button-container-inner';
+buttonContainer.appendChild(buttonContainerInner);
+
 //
+function createButton(text, className, touchStartAction, touchEndAction) {
+  const button = document.createElement('button');
+  button.textContent = text;
+  button.className = className; // Assign the class
+  button.addEventListener('touchstart', touchStartAction);
+  button.addEventListener('touchend', touchEndAction);
+  return button;
+}
+
+// Create left button
+const leftButton = createButton(
+  '<-',
+  'control-btn',
+  () => {
+    player.simulateKeyPress('ArrowLeft');
+  },
+  () => {
+    player.simulateKeyRelease('ArrowLeft');
+  }
+);
+
+// Create right button
+const rightButton = createButton(
+  '->',
+  'control-btn',
+  () => {
+    player.simulateKeyPress('ArrowRight');
+  },
+  () => {
+    player.simulateKeyRelease('ArrowRight');
+  }
+);
+
+// Create shoot button
+const shootButton = createButton(
+  'Shoot',
+  'control-btn',
+  () => {
+    player.simulateKeyPress('Space');
+  },
+  () => {
+    player.simulateKeyRelease('Space');
+  }
+);
+
+// Append buttons to the container
+buttonContainerInner.appendChild(leftButton);
+buttonContainerInner.appendChild(rightButton);
+buttonContainer.appendChild(shootButton);
