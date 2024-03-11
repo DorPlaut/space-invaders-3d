@@ -6,6 +6,31 @@ import Enemy from './classes/Enemy.js';
 import Bullet from './classes/Bullet.js';
 import Text from './classes/Text.js';
 
+// page sttings
+// function isMobileDevice() {
+//   return (
+//     typeof window.orientation !== 'undefined' ||
+//     navigator.userAgent.indexOf('IEMobile') !== -1
+//   );
+// }
+function isMobileDevice() {
+  // Check for touch support (feature detection)
+  const isTouchDevice =
+    'ontouchstart' in window ||
+    navigator.maxTouchPoints > 0 ||
+    navigator.msMaxTouchPoints > 0;
+
+  // Check if the user agent contains "Mobi" (user agent string check)
+  const isMobileUserAgent = window.navigator.userAgent
+    .toLowerCase()
+    .includes('mobi');
+
+  // Combine both checks
+  return isTouchDevice || isMobileUserAgent;
+}
+let isMobile = isMobileDevice();
+//
+
 // Set up the scene, camera, and renderer
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
@@ -20,6 +45,8 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 // update window size on resize
 window.addEventListener('resize', () => {
+  isMobile = isMobileDevice();
+  console.log(isMobile);
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -114,61 +141,63 @@ const animate = () => {
 };
 animate();
 
-// Create buttons for mobile controls
-const buttonContainer = document.createElement('div');
-buttonContainer.id = 'button-container';
-document.body.appendChild(buttonContainer);
-const buttonContainerInner = document.createElement('div');
-buttonContainerInner.id = 'button-container-inner';
-buttonContainer.appendChild(buttonContainerInner);
+if (isMobile) {
+  // Create buttons for mobile controls
+  const buttonContainer = document.createElement('div');
+  buttonContainer.id = 'button-container';
+  document.body.appendChild(buttonContainer);
+  const buttonContainerInner = document.createElement('div');
+  buttonContainerInner.id = 'button-container-inner';
+  buttonContainer.appendChild(buttonContainerInner);
 
-//
-function createButton(text, className, touchStartAction, touchEndAction) {
-  const button = document.createElement('button');
-  button.textContent = text;
-  button.className = className; // Assign the class
-  button.addEventListener('touchstart', touchStartAction);
-  button.addEventListener('touchend', touchEndAction);
-  return button;
+  //
+  function createButton(text, className, touchStartAction, touchEndAction) {
+    const button = document.createElement('button');
+    button.textContent = text;
+    button.className = className; // Assign the class
+    button.addEventListener('touchstart', touchStartAction);
+    button.addEventListener('touchend', touchEndAction);
+    return button;
+  }
+
+  // Create left button
+  const leftButton = createButton(
+    '<-',
+    'control-btn',
+    () => {
+      player.simulateKeyPress('ArrowLeft');
+    },
+    () => {
+      player.simulateKeyRelease('ArrowLeft');
+    }
+  );
+
+  // Create right button
+  const rightButton = createButton(
+    '->',
+    'control-btn',
+    () => {
+      player.simulateKeyPress('ArrowRight');
+    },
+    () => {
+      player.simulateKeyRelease('ArrowRight');
+    }
+  );
+
+  // Create shoot button
+  const shootButton = createButton(
+    'Shoot',
+    'control-btn',
+    () => {
+      player.simulateKeyPress('Space');
+    },
+    () => {
+      player.simulateKeyRelease('Space');
+    }
+  );
+
+  // Append buttons to the container
+  buttonContainerInner.appendChild(leftButton);
+  buttonContainerInner.appendChild(rightButton);
+  buttonContainer.appendChild(shootButton);
 }
-
-// Create left button
-const leftButton = createButton(
-  '<-',
-  'control-btn',
-  () => {
-    player.simulateKeyPress('ArrowLeft');
-  },
-  () => {
-    player.simulateKeyRelease('ArrowLeft');
-  }
-);
-
-// Create right button
-const rightButton = createButton(
-  '->',
-  'control-btn',
-  () => {
-    player.simulateKeyPress('ArrowRight');
-  },
-  () => {
-    player.simulateKeyRelease('ArrowRight');
-  }
-);
-
-// Create shoot button
-const shootButton = createButton(
-  'Shoot',
-  'control-btn',
-  () => {
-    player.simulateKeyPress('Space');
-  },
-  () => {
-    player.simulateKeyRelease('Space');
-  }
-);
-
-// Append buttons to the container
-buttonContainerInner.appendChild(leftButton);
-buttonContainerInner.appendChild(rightButton);
-buttonContainer.appendChild(shootButton);
