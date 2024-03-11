@@ -40,7 +40,6 @@ document.body.appendChild(renderer.domElement);
 // update window size on resize
 window.addEventListener('resize', () => {
   isMobile = isMobileDevice();
-  console.log(isMobile);
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -50,12 +49,14 @@ window.addEventListener('resize', () => {
 const controls = new OrbitControls(camera, renderer.domElement);
 
 // Set up lights (ambient, directional, etc.)
-const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
 const light = new THREE.DirectionalLight(0xffffff, 3);
 light.position.set(-10, 3, -1);
 const light2 = new THREE.DirectionalLight(0xffffff, 1);
 light2.position.set(10, -3, -1);
-scene.add(light, light2);
+const light3 = new THREE.DirectionalLight(0xffffff, 1);
+light3.position.set(0, 0, 50);
+scene.add(light, light2, light3);
 scene.add(ambientLight);
 
 // Position the camera
@@ -106,12 +107,29 @@ const startLevel = () => {
 // const title = new Text(scene, 'HLELLO WORLDL');
 // scene.add(title.mesh);
 
+// score board
+let score = 0;
+const scoreBoard = document.createElement('div');
+scoreBoard.id = 'score-board';
+scoreBoard.innerHTML = `<p>Score : ${score}</p>`;
+document.body.appendChild(scoreBoard);
+
+// update score
+const updateScore = () => {
+  score = player.score;
+  scoreBoard.innerHTML = `<p>Score : ${score}</p>`;
+};
+//
+
 // Game loop (animation)
 const animate = () => {
   requestAnimationFrame(animate);
   // update elements
   player.update();
   level.update();
+
+  // update score
+  if (score != player.score) updateScore();
 
   // create now level when level is cleared
   // Check if the current level is cleared
@@ -121,10 +139,6 @@ const animate = () => {
   }
 
   // // check if player is dead
-  // if (player.gotHit) {
-  //   player.gotHit = false;
-  //   player.lives -= 1;
-  // }
   if (player.lives == 0) {
     scene.remove(player.mesh);
     // scene.remove(level.mesh);
@@ -136,6 +150,9 @@ const animate = () => {
 };
 animate();
 
+// END OF THREE JS
+
+// Buttons control for mobile devices
 if (isMobile) {
   // Create buttons for mobile controls
   const buttonContainer = document.createElement('div');
@@ -144,8 +161,6 @@ if (isMobile) {
   const buttonContainerInner = document.createElement('div');
   buttonContainerInner.id = 'button-container-inner';
   buttonContainer.appendChild(buttonContainerInner);
-
-  //
   function createButton(
     iconClass,
     className,

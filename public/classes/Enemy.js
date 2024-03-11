@@ -10,8 +10,12 @@ class Enemy {
     this.pixelArt = null;
     this.mesh = new THREE.Group();
     if (enemyType === 'squid') this.pixelArt = this.createSquid();
-    if (enemyType === 'octopus') this.pixelArt = this.createOctopus();
     if (enemyType === 'crab') this.pixelArt = this.createCrab();
+    if (enemyType === 'octopus') this.pixelArt = this.createOctopus();
+    this.points = 0;
+    if (enemyType === 'squid') this.points = 10;
+    if (enemyType === 'crab') this.points = 20;
+    if (enemyType === 'octopus') this.points = 30;
     // collisions
     this.collisionMesh = null;
     this.gotHit = false;

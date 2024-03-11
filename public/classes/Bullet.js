@@ -21,19 +21,19 @@ class Bullet {
     this.raycaster = new THREE.Raycaster();
     this.hasCollided = false;
     // glow mesh
-    this.glowMesh = new THREE.Mesh(
-      new THREE.SphereGeometry(0.5, 32, 16),
-      new FakeGlowMaterial({
-        falloff: 0.2,
-        glowInternalRadius: 10,
-        glowColor: this.color,
-        glowSharpness: 0,
-        opacity: 1,
-        side: THREE.FrontSide,
-        depthTest: true,
-      })
-    );
-    this.mesh.add(this.glowMesh);
+    // this.glowMesh = new THREE.Mesh(
+    //   new THREE.SphereGeometry(0.5, 32, 16),
+    //   new FakeGlowMaterial({
+    //     falloff: 0.2,
+    //     glowInternalRadius: 10,
+    //     glowColor: this.color,
+    //     glowSharpness: 0,
+    //     opacity: 1,
+    //     side: THREE.FrontSide,
+    //     depthTest: true,
+    //   })
+    // );
+    // this.mesh.add(this.glowMesh);
   }
 
   update() {
@@ -66,6 +66,9 @@ class Bullet {
             // * end
             // update enemy
             if (!flaseHit && enemy) {
+              // add points
+              this.level.player.score += enemy.points;
+              // get rid of enemy
               this.hasCollided = true;
               enemy.gotHit = true;
               enemy.pixelArt.gotHit = true;
@@ -82,7 +85,7 @@ class Bullet {
       if (intersects.length > 0) {
         const flaseHit = intersects[0].distance > 1;
         if (!flaseHit && this.level.player.lives > 0) {
-          console.log('bullet hit the player');
+          // console.log('bullet hit the player');
           this.hasCollided = true;
           this.level.player.gotHit();
           this.hasCollided = true;

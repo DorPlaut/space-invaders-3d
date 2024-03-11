@@ -11,7 +11,7 @@ class PixelArt {
     color,
     duration = 1500,
     isAnimted = false,
-    isGlowing = true
+    isGlowing = false
   ) {
     this.customCoords = customCoordsPos1;
     this.customCoordsPos1 = customCoordsPos1;

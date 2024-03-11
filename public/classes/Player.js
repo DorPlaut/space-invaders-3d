@@ -31,6 +31,8 @@ class Player {
     this.lastShotTime = 0;
     this.shootingCooldown = 200;
     this.iShooting = false;
+    // score
+    this.score = 0;
     // Keyboard event listener
     window.addEventListener('keydown', this.handleKeyDown.bind(this));
     window.addEventListener('keyup', this.handleKeyUp.bind(this));

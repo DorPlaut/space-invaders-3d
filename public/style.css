@@ -2,6 +2,12 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  /* font */
+  font-family: 'Pixelify Sans', sans-serif;
+  font-optical-sizing: auto;
+}
+:root {
+  font-size: 16px;
 }
 a {
   color: white;
@@ -23,10 +29,6 @@ a:hover {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  /* font */
-  font-family: 'Pixelify Sans', sans-serif;
-  font-optical-sizing: auto;
-  pointer-events: none;
 
   font-style: normal;
 }
@@ -37,9 +39,9 @@ a:hover {
 
 #button-container {
   position: absolute;
+  z-index: 1;
   bottom: 3rem;
   width: 100%;
-  /* background: red; */
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -63,4 +65,39 @@ a:hover {
 }
 .control-btn:hover {
   background: rgb(190, 190, 190);
+}
+
+/* score board */
+#score-board {
+  pointer-events: none;
+  position: absolute;
+  bottom: 0;
+  color: white;
+  font-size: 2rem;
+  padding: 0.5rem;
+  border-radius: 10px 10px 0 0;
+  border-top: solid white 2px;
+  border-left: solid white 2px;
+  border-right: solid white 2px;
+  margin: 0 1rem;
+}
+
+@media screen and (max-width: 768px) {
+  :root {
+    font-size: 13px;
+  }
+  .layout {
+    justify-content: flex-start;
+  }
+  #score-board {
+    font-size: 1.5rem;
+    left: 0;
+    right: 0;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #button-container {
+    bottom: 3.5rem;
+  }
 }
