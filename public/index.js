@@ -46,7 +46,8 @@ window.addEventListener('resize', () => {
 });
 
 // controls
-const controls = new OrbitControls(camera, renderer.domElement);
+let controls;
+if (isMobile) controls = new OrbitControls(camera, renderer.domElement);
 
 // Set up lights (ambient, directional, etc.)
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
