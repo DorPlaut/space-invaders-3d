@@ -9,9 +9,11 @@ module.exports = {
   // mode: 'development',
   mode: mode,
   entry: './public/index.js',
+
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, outputPath),
+    publicPath: isProduction ? '/dist/' : '/dist/',
   },
   module: {
     rules: [
