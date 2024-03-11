@@ -164,8 +164,9 @@ if (isMobile) {
 
   const leftIconClass = 'fa-arrow-left';
   const rightIconClass = 'fa-arrow-right';
-  const shootIconClass = 'fa-bullseye';
+  const shootIconClass = 'fa-rocket';
 
+  // <i class="fa-solid fa-rocket"></i>;
   // Create left button
   const leftButton = createButton(
     leftIconClass,
