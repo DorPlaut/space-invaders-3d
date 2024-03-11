@@ -2,6 +2,8 @@ const path = require('path');
 const webpack = require('webpack');
 
 const mode = process.env.NODE_ENV || 'development';
+const isProduction = mode === 'production';
+const outputPath = isProduction ? 'public/dist' : 'dist';
 
 module.exports = {
   // mode: 'development',
@@ -9,7 +11,7 @@ module.exports = {
   entry: './public/index.js',
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, outputPath),
   },
   module: {
     rules: [
