@@ -7,12 +7,6 @@ import Bullet from './classes/Bullet.js';
 import Text from './classes/Text.js';
 
 // page sttings
-// function isMobileDevice() {
-//   return (
-//     typeof window.orientation !== 'undefined' ||
-//     navigator.userAgent.indexOf('IEMobile') !== -1
-//   );
-// }
 function isMobileDevice() {
   // Check for touch support (feature detection)
   const isTouchDevice =
@@ -66,6 +60,7 @@ scene.add(ambientLight);
 
 // Position the camera
 camera.position.set(0, 0, 50);
+if (isMobile) camera.position.set(0, 0, 90);
 
 // MODELS and OBJECTS
 // enemies
@@ -98,7 +93,7 @@ const startLevel = () => {
   if (levelY < 4) levelY += 1;
   // reduce speed interval
   if (levelSpeed > 600) levelSpeed -= 100;
-  if (levelSpeed > 200) levelSpeed -= 50;
+  if (levelSpeed > 200 && levelSpeed <= 600) levelSpeed -= 50;
 
   // Create a new level
   level = new Level(camera, scene, levelX, levelY, levelSpeed);
@@ -151,18 +146,29 @@ if (isMobile) {
   buttonContainer.appendChild(buttonContainerInner);
 
   //
-  function createButton(text, className, touchStartAction, touchEndAction) {
+  function createButton(
+    iconClass,
+    className,
+    touchStartAction,
+    touchEndAction
+  ) {
     const button = document.createElement('button');
-    button.textContent = text;
+    const icon = document.createElement('i');
+    icon.className = `fas ${iconClass}`; // Use Font Awesome classes
+    button.appendChild(icon);
     button.className = className; // Assign the class
     button.addEventListener('touchstart', touchStartAction);
     button.addEventListener('touchend', touchEndAction);
     return button;
   }
 
+  const leftIconClass = 'fa-arrow-left';
+  const rightIconClass = 'fa-arrow-right';
+  const shootIconClass = 'fa-bullseye';
+
   // Create left button
   const leftButton = createButton(
-    '<-',
+    leftIconClass,
     'control-btn',
     () => {
       player.simulateKeyPress('ArrowLeft');
@@ -174,7 +180,7 @@ if (isMobile) {
 
   // Create right button
   const rightButton = createButton(
-    '->',
+    rightIconClass,
     'control-btn',
     () => {
       player.simulateKeyPress('ArrowRight');
@@ -186,7 +192,7 @@ if (isMobile) {
 
   // Create shoot button
   const shootButton = createButton(
-    'Shoot',
+    shootIconClass,
     'control-btn',
     () => {
       player.simulateKeyPress('Space');
