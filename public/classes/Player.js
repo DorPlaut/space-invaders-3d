@@ -29,7 +29,7 @@ class Player {
     // shooting
     this.bullets = [];
     this.lastShotTime = 0;
-    this.shootingCooldown = 1;
+    this.shootingCooldown = 200;
     this.iShooting = false;
     // score
     this.score = 0;
@@ -98,7 +98,6 @@ class Player {
         this.mesh.position.z
       );
       this.scene.add(bullet.mesh);
-
       this.iShooting = false;
       this.lastShotTime = currentTime;
     }

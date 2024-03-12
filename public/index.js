@@ -60,7 +60,7 @@ let controls = new OrbitControls(camera, renderer.domElement);
 controls.autoRotate = false;
 controls.autoRotateSpeed = 58.7;
 controls.enabled = false;
-controls.enableDamping = true;
+// controls.enableDamping = true;
 //
 
 // LIGHT - create lights
@@ -121,8 +121,8 @@ const resetLevel = () => {
 // updated settings and create the next level
 const startLevel = () => {
   // increase levelX and levelY
-  if (levelX < 9) levelX += 1;
-  if (levelY < 4) levelY += 1;
+  if (levelX < (isMobile ? 7 : 8)) levelX += 1;
+  if (levelY < (isMobile ? 5 : 4)) levelY += 1;
   // reduce speed interval to make the game faster
   if (levelSpeed > 600) levelSpeed -= 100;
   if (levelSpeed > 200 && levelSpeed <= 600) levelSpeed -= 50;
@@ -133,9 +133,9 @@ const startLevel = () => {
   level.player = player;
   // update player data
   player.level = level;
-  setTimeout(() => {
-    controls.autoRotate = false;
-  }, 1000);
+  // setTimeout(() => {
+  //   controls.autoRotate = false;
+  // }, 1000);
 };
 
 // set the page and the game
@@ -164,14 +164,27 @@ startBtn.addEventListener('click', () => {
   animate();
 });
 const showGameOverMenu = () => {
-  mainMenu.innerHTML = `      <h1>Space Invaders 3D</h1>  <div class="menu-content" >
-  <h2>Game Over, Your score is ${player.score}</h2>     <button id="start-btn" class="btn">Play again</button></div> 
-  <span
-  >Build by
-  <a class="clickable" href="http://dorplaut.com" target="_blank"
-  >Dor Plaut</a
-  ></span
-  >`;
+  mainMenu.innerHTML = `
+   <h1>Game Over</h1>
+    <div class="menu-content">
+      <h2>Your score is ${player.score}</h2>
+      <form action="">
+        <span
+          >Please enter your name to submit your score to the score board</span
+        ><br />
+        <input type="text" />
+      </form>
+      <br />
+
+      <button class="btn" id="submit-btn">Submit Score</button>
+      <button id="start-btn" class="btn">Play again</button>
+    </div>
+    <span
+      >Build by
+      <a class="clickable" href="http://dorplaut.com" target="_blank"
+        >Dor Plaut</a
+      ></span
+    > `;
   document.body.appendChild(mainMenu);
   // handle start button
   const startBtn = document.getElementById('start-btn');
@@ -285,7 +298,7 @@ const animate = () => {
     level.update();
     // Check if the current level is cleared
     if (level.levelCleard) {
-      controls.autoRotate = true;
+      // controls.autoRotate = true;
 
       // remove current level
       resetLevel();
@@ -307,7 +320,14 @@ const animate = () => {
     }
 
     //
-    controls.update();
+    // controls.update();
+    // if (Math.round(camera.rotation.y) != 0) {
+    //   controls.autoRotate = true;
+    // }
+    // if (Math.round(camera.rotation.y) == 0) {
+    //   controls.autoRotate = false;
+    // }
+    // console.log(camera.rotation.y);
   }
   // render scene
   renderer.render(scene, camera);
