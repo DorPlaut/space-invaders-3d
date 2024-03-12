@@ -163,7 +163,7 @@ startBtn.addEventListener('click', () => {
   // level.animate();
   animate();
 });
-const showGameOverMenu = () => {
+const showGameOverMenu = async () => {
   mainMenu.innerHTML = `
    <h1>Game Over</h1>
     <div class="menu-content">
@@ -172,7 +172,7 @@ const showGameOverMenu = () => {
         <span
           >Please enter your name to submit your score to the score board</span
         ><br />
-        <input type="text" />
+        <input type="text" id="player-name-input" />
       </form>
       <br />
 
@@ -185,6 +185,7 @@ const showGameOverMenu = () => {
         >Dor Plaut</a
       ></span
     > `;
+
   document.body.appendChild(mainMenu);
   // handle start button
   const startBtn = document.getElementById('start-btn');
@@ -193,12 +194,85 @@ const showGameOverMenu = () => {
     gameState = 'playing';
     // remove main menu
     document.body.removeChild(mainMenu);
+    document.body.removeChild(highestScoreContainer);
     // start game
     StartNewGame();
     // level.animate();
     animate();
   });
+  //
+  //
+  // Display highest score
+  const highestScoreContainer = document.createElement('div');
+  highestScoreContainer.innerHTML =
+    '<p id="leader-board">Highest Score: <span id="highest-score" >Loading...</span></p>';
+  document.body.appendChild(highestScoreContainer);
+
+  try {
+    // Fetch highest score from server
+    const response = await fetch(
+      `http://localhost:3000/api/score/getHighestScore`
+    );
+    const highestScoreData = await response.json();
+
+    if (response.ok) {
+      const highestScoreElement = document.getElementById('highest-score');
+      highestScoreElement.textContent = highestScoreData
+        ? highestScoreData.score
+        : 'N/A';
+    } else {
+      console.error('Failed to fetch highest score:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error fetching highest score:', error);
+  }
+  // SUBMIT SCORE
+  const submitButton = document.getElementById('submit-btn');
+  submitButton.addEventListener('click', async () => {
+    const playerNameInput = document.getElementById('player-name-input');
+    const playerName = playerNameInput.value;
+
+    // Check if the player entered a name
+    if (!playerName.trim()) {
+      alert('Please enter your name before submitting the score.');
+      return;
+    }
+
+    // Assuming 'score' is the variable holding the player's score
+    const scoreData = {
+      player_name: playerName,
+      score: score,
+    };
+
+    try {
+      // Assuming SERVER_URL is the environment variable holding the server URL
+      const response = await fetch(
+        `http://localhost:3000/api/score/submitScore`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(scoreData),
+        }
+      );
+
+      if (response.ok) {
+        alert('Score submitted successfully!');
+      } else {
+        alert('Failed to submit score. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting score:', error);
+      alert('Failed to submit score. Please try again.');
+    }
+  });
+
+  //
+  //
 };
+
+//
 // Create the score board
 let score = 0;
 const scoreBoard = document.createElement('div');
