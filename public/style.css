@@ -9,6 +9,25 @@
 :root {
   font-size: 16px;
 }
+body {
+  background: black;
+}
+h1 {
+  font-size: 3rem;
+}
+.btn {
+  background: white;
+  color: black;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  border: none;
+  transition: 0.2s;
+  cursor: pointer;
+}
+.btn:hover {
+  background: black;
+  color: white;
+}
 a {
   color: white;
   text-decoration: none;
@@ -66,12 +85,47 @@ a:hover {
 .control-btn:hover {
   background: rgb(190, 190, 190);
 }
+/* main menu */
+#main-menu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: fit-content;
+  height: fit-content;
+  padding: 1rem;
+  text-align: center;
 
-/* score board */
+  background: rgb(24, 24, 24);
+  color: white;
+  margin: auto;
+}
+
+.menu-content {
+  margin: 1rem;
+}
+
+/* score board-current session */
 #score-board {
   pointer-events: none;
   position: absolute;
   bottom: 0;
+  color: white;
+  font-size: 2rem;
+  padding: 0.5rem;
+  border-radius: 10px 10px 0 0;
+  border-top: solid white 2px;
+  border-left: solid white 2px;
+  border-right: solid white 2px;
+  margin: 0 1rem;
+}
+/* score board - leaderboard */
+#leader-board {
+  pointer-events: none;
+  position: absolute;
+  bottom: 0;
+  right: 0;
   color: white;
   font-size: 2rem;
   padding: 0.5rem;

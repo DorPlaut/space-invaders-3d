@@ -3,8 +3,8 @@ const path = require('path'); // Import the 'path' module
 
 const app = express();
 
-// // Serve static files from the React app
-// app.use(express.static(path.join(__dirname, './dist')));
+// // Serve static files from the js app
+app.use(express.static(path.join(__dirname, './public')));
 
 // Other app logic
 

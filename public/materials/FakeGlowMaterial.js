@@ -123,7 +123,31 @@ class FakeGlowMaterial extends ShaderMaterial {
       ),
     };
 
-    this.setValues(parameters);
+    // this.setValues(parameters);
+    // this.depthTest =
+    //   parameters.depthTest !== undefined ? parameters.depthTest : false;
+    // this.blending =
+    //   parameters.blendMode !== undefined
+    //     ? parameters.blendMode
+    //     : AdditiveBlending;
+    // this.transparent = true;
+    // this.side = parameters.side !== undefined ? parameters.side : DoubleSide;
+    // Set default values or modify existing properties directly on this
+    this.uniforms.opacity.value =
+      parameters.opacity !== undefined ? parameters.opacity : 1.0;
+    this.uniforms.glowInternalRadius.value =
+      parameters.glowInternalRadius !== undefined
+        ? parameters.glowInternalRadius
+        : 6.0;
+    this.uniforms.glowSharpness.value =
+      parameters.glowSharpness !== undefined ? parameters.glowSharpness : 0.5;
+    this.uniforms.falloff.value =
+      parameters.falloff !== undefined ? parameters.falloff : 0.1;
+    this.uniforms.glowColor.value =
+      parameters.glowColor !== undefined
+        ? new Color(parameters.glowColor)
+        : new Color('#00d5ff');
+
     this.depthTest =
       parameters.depthTest !== undefined ? parameters.depthTest : false;
     this.blending =

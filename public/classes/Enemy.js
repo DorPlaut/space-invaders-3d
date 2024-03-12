@@ -311,7 +311,7 @@ class Enemy {
       pixelSize,
       pixelSpacing,
       color,
-      1000,
+      1500,
       true
     );
     this.mesh.add(pixelArt.mesh);
@@ -427,7 +427,7 @@ class Enemy {
       pixelSize,
       pixelSpacing,
       color,
-      1000,
+      1250,
       true
     );
     this.mesh.add(pixelArt.mesh);
