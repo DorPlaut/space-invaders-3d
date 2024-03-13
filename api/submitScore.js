@@ -6,13 +6,12 @@ const getHighestScore = async (req, res) => {
     // Connect to MongoDB
     await connectDB(process.env.MONGO_URI);
     // define new data
-    coreData = req.body;
+    scoreData = req.body;
+    console.log(coreData);
     // store new data in db
     newScore = await Score.create(scoreData);
     if (newScore) {
       res.status(201).json(newScore);
-    } else {
-      res.status(500).json(newScore);
     }
   } catch (error) {
     // Handle errors
