@@ -16,6 +16,7 @@ h1 {
   font-size: 3rem;
 }
 .btn {
+  pointer-events: all;
   background: white;
   color: black;
   margin: 0.5rem;

@@ -103,7 +103,7 @@ export const createScoreBoards = async (score) => {
   highestScoreContainer.id = 'leader-board';
   highestScoreContainer.innerHTML = `
     <p >Highest Score: <span id="highest-score">Loading...</span></p>
-    <button id="toggle-btn">Show Top 5</button>
+    <button class="btn"  id="toggle-btn">Show Top 5</button>
  `;
   document.body.appendChild(highestScoreContainer);
 
