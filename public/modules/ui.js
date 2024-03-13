@@ -90,6 +90,8 @@ export const showGameOverMenu = async (handlePlayBtn, score) => {
   });
 };
 
+// SHOW SCORE
+
 export const createScoreBoards = async (score) => {
   // current game score board
   const scoreBoard = document.createElement('div');
@@ -98,9 +100,14 @@ export const createScoreBoards = async (score) => {
   document.body.appendChild(scoreBoard);
   // all time score board
   const highestScoreContainer = document.createElement('div');
-  highestScoreContainer.innerHTML =
-    '<p id="leader-board">Highest Score: <span id="highest-score" >Loading...</span></p>';
+  highestScoreContainer.id = 'leader-board';
+  highestScoreContainer.innerHTML = `
+    <p >Highest Score: <span id="highest-score">Loading...</span></p>
+    <button id="toggle-btn">Show Top 5</button>
+ `;
   document.body.appendChild(highestScoreContainer);
+
+  //
 
   // Fetch highest score from server
   const highestScoreData = await getHighScore();
@@ -108,7 +115,48 @@ export const createScoreBoards = async (score) => {
   highestScoreElement.textContent = highestScoreData
     ? `${highestScoreData.player_name} - ${highestScoreData.score}`
     : 'N/A';
+
+  // Fetch full scores list
+  const scoresList = await getScores();
+  const top5Scores = scoresList
+    .slice(0, 5)
+    .map((score) => `${score.player_name} - ${score.score}`)
+    .join('<br>');
+
+  // Toggle button functionality
+  const toggleBtn = document.getElementById('toggle-btn');
+  toggleBtn.addEventListener('click', () => {
+    if (toggleBtn.textContent === 'Show Top 5') {
+      highestScoreElement.innerHTML = top5Scores;
+      toggleBtn.textContent = 'Show Highest Score';
+    } else {
+      highestScoreElement.textContent = highestScoreData
+        ? `${highestScoreData.player_name} - ${highestScoreData.score}`
+        : 'N/A';
+      toggleBtn.textContent = 'Show Top 5';
+    }
+  });
 };
+
+// export const createScoreBoards = async (score) => {
+//   // current game score board
+//   const scoreBoard = document.createElement('div');
+//   scoreBoard.id = 'score-board';
+//   scoreBoard.innerHTML = `<p>Score : ${score}</p>`;
+//   document.body.appendChild(scoreBoard);
+//   // all time score board
+//   const highestScoreContainer = document.createElement('div');
+//   highestScoreContainer.innerHTML =
+//     '<p id="leader-board">Highest Score: <span id="highest-score" >Loading...</span></p>';
+//   document.body.appendChild(highestScoreContainer);
+
+//   // Fetch highest score from server
+//   const highestScoreData = await getHighScore();
+//   const highestScoreElement = document.getElementById('highest-score');
+//   highestScoreElement.textContent = highestScoreData
+//     ? `${highestScoreData.player_name} - ${highestScoreData.score}`
+//     : 'N/A';
+// };
 
 // Update score board
 export const updateScore = (score) => {
