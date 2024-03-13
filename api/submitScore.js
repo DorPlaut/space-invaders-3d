@@ -9,7 +9,11 @@ const getHighestScore = async (req, res) => {
     coreData = req.body;
     // store new data in db
     newScore = await Score.create(scoreData);
-    res.status(201).json(newScore);
+    if (newScore) {
+      res.status(201).json(newScore);
+    } else {
+      res.status(500).json(newScore);
+    }
   } catch (error) {
     // Handle errors
     console.error(error);
