@@ -15,7 +15,7 @@ app.use(express.json());
 app.use('/api/score', scoreRouts);
 // // Serve static files from the js app
 // app.use(express.static(path.join(__dirname, '../public')));
-app.use(express.static('../public'));
+// app.use(express.static('../public'));
 
 // Other app logic
 

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { degToRad, radToDeg } from '../utils.js';
-import FakeGlowMaterial from '../materials/FakeGlowMaterial.js';
+import FakeGlowMaterial from '../assets/materials/FakeGlowMaterial.js';
 
 class Bullet {
   constructor(level, bullets, index, type = 'player') {

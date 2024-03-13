@@ -10,7 +10,7 @@ const {
 } = require('../controllers/score');
 
 router.post('/submitScore', submitScore);
-router.get('/getAllScores', getAllScores);
+router.get('/', getAllScores);
 router.get('/getHighestScore', getHighestScore);
 
 module.exports = router;

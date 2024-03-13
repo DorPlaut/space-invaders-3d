@@ -41,7 +41,7 @@ class Player {
   loadModel(onModelLoaded) {
     const loader = new GLTFLoader();
     loader.load(
-      'models/Spaceship.gltf',
+      'assets/models/Spaceship.gltf',
       (gltf) => {
         // Once loaded, set the mesh
         gltf.scene.scale.multiplyScalar(0.0025);
