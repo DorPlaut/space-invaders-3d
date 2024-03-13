@@ -13,25 +13,19 @@ app.use(express.json());
 
 // Routes
 app.use('/api/score', scoreRouts);
-// // Serve static files from the js app
-// app.use(express.static(path.join(__dirname, '../public')));
-// app.use(express.static('../public'));
 
-// Other app logic
-
-// Run the server
-const PORT = process.env.PORT || 3000;
-const start = async () => {
+// Connect to the database
+const connect = async () => {
   try {
     await connectDB(process.env.MONGO_URI);
-    app.listen(PORT, () => {
-      console.log(`Server is running at http://localhost:${PORT}/`);
-    });
+    console.log('Database connected');
   } catch (error) {
     console.log(error);
   }
 };
 
-start();
+// Connect to the database when the function is deployed
+connect();
 
+// Export the Express app
 module.exports = app;
