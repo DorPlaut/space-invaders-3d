@@ -6,7 +6,7 @@ const getAllScores = async (req, res) => {
     // Connect to MongoDB
     await connectDB(process.env.MONGO_URI);
     // Fetch all scores from the database
-    const scoresList = await Score.find();
+    const scoresList = await Score.find().sort({ score: -1 });
     // Send the scores list as a JSON response with a 200 status code
     res.status(200).json(scoresList);
   } catch (error) {
