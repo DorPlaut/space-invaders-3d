@@ -19,7 +19,7 @@ export const getScores = async () => {
 export const getHighScore = async () => {
   try {
     const response = await fetch(
-      `https://space-invaders-3d.vercel.app/api/score/getHighestScore`
+      `https://space-invaders-3d.vercel.app/api/getHighestScore`
     );
     const highestScoreData = await response.json();
 
@@ -36,7 +36,7 @@ export const getHighScore = async () => {
 export const postScore = async (scoreData) => {
   try {
     const response = await fetch(
-      `https://space-invaders-3d.vercel.app/api/score/submitScore`,
+      `https://space-invaders-3d.vercel.app/api/submitScore`,
       {
         method: 'POST',
         headers: {
