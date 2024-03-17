@@ -7,6 +7,7 @@ const getHighestScore = async (req, res) => {
     await connectDB(process.env.MONGO_URI);
     // define new data
     scoreData = req.body;
+    console.log(scoreData);
     // store new data in db
     newScore = await Score.create(scoreData);
     if (newScore) {

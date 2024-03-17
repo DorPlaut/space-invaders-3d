@@ -1,5 +1,8 @@
+// const serverUrl = 'http://localhost:9000/api';
+const serverUrl = 'https://space-invaders-3d.vercel.app/api';
+
 export const getScores = async () => {
-  const serverUrl = 'https://space-invaders-3d.vercel.app/api';
+  // const serverUrl = 'https://space-invaders-3d.vercel.app/api';
   try {
     const response = await fetch(`${serverUrl}/score`);
     const scoresData = await response.json();
@@ -16,7 +19,7 @@ export const getScores = async () => {
 
 // Get the high score from server
 export const getHighScore = async () => {
-  const serverUrl = 'https://space-invaders-3d.vercel.app/api';
+  // const serverUrl = 'https://space-invaders-3d.vercel.app/api';
 
   try {
     const response = await fetch(`${serverUrl}/getHighestScore`);
@@ -33,7 +36,7 @@ export const getHighScore = async () => {
 };
 // Post new score to server
 export const postScore = async (scoreData) => {
-  const serverUrl = 'https://space-invaders-3d.vercel.app/api';
+  // const serverUrl = 'https://space-invaders-3d.vercel.app/api';
   try {
     const response = await fetch(`${serverUrl}/submitScore`, {
       method: 'POST',
