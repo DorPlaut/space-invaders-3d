@@ -9,7 +9,7 @@ const getHighestScore = async (req, res) => {
     const scoreData = req.body;
     console.log(scoreData);
     // store new data in db
-    newScore = await Score.create(scoreData);
+    const newScore = await Score.create(scoreData);
     if (newScore) {
       res.status(201).json(newScore);
     }
