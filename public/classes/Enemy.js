@@ -3,11 +3,12 @@ import { degToRad, radToDeg } from '../utils.js';
 import PixelArt from './PixelArt.js';
 
 class Enemy {
-  constructor(camera, scene, enemyType = 'squid') {
+  constructor(camera, scene, level, enemyType = 'squid') {
     this.scene = scene;
     this.camera = camera;
     this.player = null;
     this.pixelArt = null;
+    this.level = level;
     this.mesh = new THREE.Group();
     if (enemyType === 'squid') this.pixelArt = this.createSquid();
     if (enemyType === 'crab') this.pixelArt = this.createCrab();
@@ -19,6 +20,18 @@ class Enemy {
     // collisions
     this.collisionMesh = null;
     this.gotHit = false;
+    // jumping
+    this.jumping = false;
+    this.falling = false;
+    this.jumpInterval;
+
+    if (this.level.currentLevel % 3 == 0) {
+      this.activateJumpTimer();
+    } else {
+      clearInterval(this.jumpInterval);
+    }
+    // Start jump interval timer
+    // this.startJumpTimer();
   }
 
   createCollisionMesh(coords, pixelSize) {
@@ -435,8 +448,68 @@ class Enemy {
     return pixelArt;
   };
 
+  handleJumping = () => {
+    let interval;
+    if (this.mesh.position.z >= 1) {
+      this.jumping = false;
+      interval = setTimeout(() => {
+        this.falling = true;
+      }, 2000);
+    }
+    if (this.mesh.position.z <= 0 && this.falling) {
+      clearInterval(interval);
+      this.jumping = false;
+      this.falling = false;
+    }
+  };
+
+  // trigger jumping randomly
+  activateJumpTimer = () => {
+    this.jumpInterval = setInterval(() => {
+      console.log('jump');
+      this.jumping = true;
+    }, Math.floor(Math.random() * 10000) + 1000);
+  };
+  // clear jumpInterval
+  clearJumpInterval() {
+    clearInterval(this.jumpInterval);
+  }
+  // handle enemy rotation (face the camera )
+  handleEnemyRotation() {
+    switch (this.level.currentLevel % 3) {
+      case 1: // Level 1
+        if (this.mesh.rotation.x > degToRad(0)) this.mesh.rotation.x -= 0.1;
+        break;
+      case 2: // Level 2
+        if (this.mesh.rotation.x < degToRad(45)) this.mesh.rotation.x += 0.1;
+        break;
+      case 0: // Level 3
+        if (this.mesh.rotation.x < degToRad(90)) this.mesh.rotation.x += 0.1;
+        this.handleJumping();
+        break;
+      default:
+        break;
+    }
+  }
+
   update() {
-    // this.pixelArt.update();
+    this.handleEnemyRotation();
+    // if (this.level.currentLevel == 2 && this.mesh.rotation.x < degToRad(45)) {
+    //   this.mesh.rotation.x += 0.1;
+    // }
+    // if (this.level.currentLevel == 3) {
+    //   if (this.mesh.rotation.x < degToRad(90)) this.mesh.rotation.x += 0.1;
+    //   this.handleJumping();
+    // }
+    if (this.jumping) {
+      this.mesh.position.z += 0.1;
+    }
+    if (this.falling) {
+      this.mesh.position.z -= 0.1;
+    }
+    if (this.level.currentLevel % 3 != 0) {
+      this.clearJumpInterval();
+    }
   }
 }
 

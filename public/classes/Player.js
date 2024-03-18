@@ -5,8 +5,9 @@ import Bullet from './Bullet.js';
 import PixelArt from './PixelArt.js';
 
 class Player {
-  constructor(scene, level, onModelLoaded, lives = 3) {
+  constructor(scene, camera, level, onModelLoaded, lives = 3) {
     this.scene = scene;
+    this.camera = camera;
     this.level = level;
     this.collisionMesh = null;
     this.mesh = null;
@@ -125,9 +126,7 @@ class Player {
       const posX = (index + 1) * heartSpacing;
       heart.position.set(posX, 0, 0);
     });
-    // this.lifeBarMesh.add(heart);
-    this.lifeBarMesh.position.set(1, -7.5, 0);
-    this.lifeBarMesh.scale.multiplyScalar(0.1);
+    this.lifeBarMesh.scale.multiplyScalar(0.07);
   };
   // create heart and add life
   createHeart = (isFull) => {
@@ -224,6 +223,31 @@ class Player {
     }, 1000);
   };
 
+  // Position life bar
+  updateLifebarPosition = () => {
+    this.lifeBarMesh.position.set(
+      this.mesh.position.x,
+      this.mesh.position.y,
+      this.mesh.position.z
+    );
+    switch (this.level.currentLevel % 3) {
+      case 1: // Level 1
+        if (this.lifeBarMesh.rotation.x > degToRad(0))
+          this.lifeBarMesh.rotation.x -= 0.1;
+        break;
+      case 2: // Level 2
+        if (this.lifeBarMesh.rotation.x < degToRad(45))
+          this.lifeBarMesh.rotation.x += 0.1;
+        break;
+      case 0: // Level 3
+        if (this.lifeBarMesh.rotation.x < degToRad(90))
+          this.lifeBarMesh.rotation.x += 0.1;
+        break;
+      default:
+        break;
+    }
+  };
+
   // KEYBOARD CONTROLS
   handleKeyDown(event) {
     switch (event.key) {
@@ -304,6 +328,7 @@ class Player {
 
   update() {
     if (this.mesh) {
+      this.updateLifebarPosition();
       if (this.isRotating) {
         // Smoothly rotate towards the target rotation
         this.mesh.rotation.z +=
@@ -336,10 +361,6 @@ class Player {
     this.lifeBar.map((life, index) => {
       this.lifeBar[index].update();
     });
-    // if (this.lives <= 0) {
-    //   // disable shootimg
-    //   this.iShooting = true;
-    // }
   }
   // end game
 }

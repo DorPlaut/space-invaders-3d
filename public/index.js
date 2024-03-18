@@ -12,6 +12,9 @@ import {
   removeMobileBtns,
 } from './modules/ui.js';
 import { isMobileDevice } from './utils.js';
+import gsap from 'gsap';
+import { GUI } from 'dat.gui';
+import { degToRad, radToDeg } from 'three/src/math/MathUtils.js';
 
 // SPACE INVADERS 3D
 // Game state
@@ -40,11 +43,11 @@ window.addEventListener('resize', () => {
 });
 // Set the camera
 const cameraZAxis = isMobile ? 90 : 50;
-camera.position.set(0, 0, cameraZAxis);
+camera.position.set(0, 0, cameraZAxis + 100);
+camera.lookAt(0, 0, 0);
 
 // // add orbit controls
 // let controls = new OrbitControls(camera, renderer.domElement);
-
 // LIGHT - create lights
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
 const light = new THREE.DirectionalLight(0xffffff, 3);
@@ -57,13 +60,92 @@ light3.position.set(0, 0, 50);
 scene.add(light, light2, light3);
 scene.add(ambientLight);
 
-// GAME LOGIC
+// camera aniamtions
+
+let endCameraPosition;
+let endCameraRotation;
+
+const handleAnimation = () => {
+  // Set animation based on currentLevel
+  switch (currentLevel % 3) {
+    case 1: // Level 1
+      endCameraPosition = { x: 0, y: 0, z: cameraZAxis };
+      endCameraRotation = { x: 0, y: 0, z: 0 };
+      break;
+    case 2: // Level 2
+      endCameraPosition = { x: 0, y: -30, z: cameraZAxis - 20 };
+      endCameraRotation = { x: degToRad(45), y: 0, z: 0 };
+      break;
+    case 0: // Level 3
+      endCameraPosition = { x: 0, y: -40, z: 8 };
+      endCameraRotation = { x: degToRad(80), y: 0, z: 0 };
+      break;
+    default:
+      break;
+  }
+  // run animation
+  animateCamera(endCameraPosition, endCameraRotation);
+};
+
+// animate
+const animateCamera = (endPosition, endRotation) => {
+  const duration = 2; // Duration in seconds
+  const easing = 'easeInOutCubic'; // Easing function
+
+  gsap.to(camera.position, {
+    x: endPosition.x,
+    y: endPosition.y,
+    z: endPosition.z,
+    duration: duration,
+    ease: easing,
+  });
+
+  gsap.to(camera.rotation, {
+    x: endRotation.x,
+    y: endRotation.y,
+    z: endRotation.z,
+    duration: duration,
+    ease: easing,
+  });
+};
+
+//
+//
+//
+//
+//
+
+// HELPER GUI
+// const gui = new GUI();
+
+// const cameraFolder = gui.addFolder('Camera');
+// cameraFolder.add(camera.position, 'x', -500, 500);
+// cameraFolder.add(camera.position, 'y', -500, 500);
+// cameraFolder.add(camera.position, 'z', -500, 500);
+// // Rotation controls
+// cameraFolder
+//   .add(camera.rotation, 'x', degToRad(-360), degToRad(360))
+//   .name('Rotation X');
+// cameraFolder
+//   .add(camera.rotation, 'y', degToRad(-360), degToRad(360))
+//   .name('Rotation Y');
+// cameraFolder
+//   .add(camera.rotation, 'z', degToRad(-360), degToRad(360))
+//   .name('Rotation Z');
+
+// cameraFolder.open();
+
+// ##
+// ###
+// #### GAME LOGIC ####
+// ###
+// ##
 
 // PLAYER
 // create the player
 let player;
 const createPlayer = () => {
-  player = new Player(scene, level, (mesh) => {
+  player = new Player(scene, camera, level, (mesh) => {
     player.mesh.position.set(0, -6, 0);
     scene.add(mesh);
     level.player = player;
@@ -73,15 +155,18 @@ const createPlayer = () => {
 // LEVEL
 // level settings
 let currentLevel = 1;
-let levelX = 5;
-let levelY = 2;
+let levelX = 1;
+let levelY = 1;
+// let levelX = 5;
+// let levelY = 2;
 let levelSpeed = 2000;
 let level;
 // Strat level - create level and player and add them to the scene
 const startNewGame = () => {
+  handleAnimation();
   resetLevelSettings();
   if (isMobile) handelMobile();
-  level = new Level(camera, scene, levelX, levelY, levelSpeed);
+  level = new Level(camera, scene, levelX, levelY, levelSpeed, currentLevel);
   scene.add(level.mesh);
   createPlayer();
 };
@@ -97,12 +182,14 @@ const resetLevelSettings = () => {
 };
 // remove current level
 const removeLevel = () => {
+  console.log(scene.children);
   scene.remove(level.mesh);
 };
 
 // updated settings and create the next level
 const startLevel = () => {
   currentLevel += 1;
+  handleAnimation();
   // increase levelX and levelY
   if (levelX < (isMobile ? 7 : 8)) levelX += 1;
   if (levelY < (isMobile ? 5 : 4)) levelY += 1;
@@ -110,7 +197,7 @@ const startLevel = () => {
   if (levelSpeed > 600) levelSpeed -= 100;
   if (levelSpeed > 200 && levelSpeed <= 600) levelSpeed -= 50;
   // Create a new level
-  level = new Level(camera, scene, levelX, levelY, levelSpeed);
+  level = new Level(camera, scene, levelX, levelY, levelSpeed, currentLevel);
   // level.animate();
   scene.add(level.mesh);
   level.player = player;
@@ -131,6 +218,8 @@ const animate = () => {
     if (level.levelCleard) {
       // remove current level
       removeLevel();
+      // console.log(level);
+
       // if old level is removed, add new level with updated setting
       if (!scene.level) startLevel();
     }
@@ -146,7 +235,7 @@ const animate = () => {
       clearInterval(level.animationInterval);
       gameState = 'gameover';
       showGameOverMenu(handlePlayBtn, player.score);
-      removeMobileBtns();
+      if (isMobile) removeMobileBtns();
     }
   }
   // render scene

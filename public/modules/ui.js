@@ -102,8 +102,8 @@ export const createScoreBoards = async (score) => {
   const highestScoreContainer = document.createElement('div');
   highestScoreContainer.id = 'leader-board';
   highestScoreContainer.innerHTML = `
-    <p >Highest Score: <span id="highest-score">Loading...</span></p>
-    <button class="btn"  id="toggle-btn">Show Top 5</button>
+    <p >Highest Score: <br/> <span id="highest-score">Loading...</span></p>
+    <button class="btn"  id="toggle-btn"><i class="fa-solid fa-angles-down"></i></button>
  `;
   document.body.appendChild(highestScoreContainer);
 
@@ -126,17 +126,20 @@ export const createScoreBoards = async (score) => {
   // Toggle button functionality
   const toggleBtn = document.getElementById('toggle-btn');
   toggleBtn.addEventListener('click', () => {
-    if (toggleBtn.textContent === 'Show Top 5') {
+    if (toggleBtn.innerHTML === '<i class="fa-solid fa-angles-down"></i>') {
       highestScoreElement.innerHTML = top5Scores;
-      toggleBtn.textContent = 'Show Highest Score';
+      toggleBtn.innerHTML = '<i class="fa-solid fa-angles-up"></i>';
     } else {
       highestScoreElement.textContent = highestScoreData
         ? `${highestScoreData.player_name} - ${highestScoreData.score}`
         : 'N/A';
-      toggleBtn.textContent = 'Show Top 5';
+      toggleBtn.innerHTML = '<i class="fa-solid fa-angles-down"></i>';
     }
   });
 };
+
+const leftIconClass = 'fa-arrow-down';
+const rightIconClass = 'fa-arrow-up';
 
 // export const createScoreBoards = async (score) => {
 //   // current game score board

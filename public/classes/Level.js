@@ -3,11 +3,18 @@ import Enemy from './Enemy';
 import Bullet from './Bullet';
 // level
 class Level {
-  constructor(camera, scene, gridWidth = 10, gridHeight = 3, speed = 1000) {
+  constructor(
+    camera,
+    scene,
+    gridWidth = 10,
+    gridHeight = 3,
+    speed = 1000,
+    currentLevel
+  ) {
     this.scene = scene;
     this.camera = camera;
     this.player = null;
-
+    this.currentLevel = currentLevel;
     // grid
     this.gridHeight = gridHeight;
     this.gridWidth = gridWidth;
@@ -41,7 +48,7 @@ class Level {
 
   // Create Enemy
   addEnemy(x, y, z, type) {
-    this.enemies.push(new Enemy(this.camera, this.scene, type));
+    this.enemies.push(new Enemy(this.camera, this.scene, this, type));
     const enemy = this.enemies[this.enemies.length - 1];
     // console.log(enemy.mesh);
     enemy.mesh.position.set(x, y, z);
@@ -172,7 +179,9 @@ class Level {
     // check if all the enemies are dead by checking if they have a mesh
     if (this.mesh.children.length == 0) {
       clearInterval(this.animationInterval);
-
+      this.bullets.map((bullet, index) => {
+        this.scene.remove(bullet.mesh);
+      });
       this.levelCleard = true;
     }
     // if (this.player) console.log(this.player.bullets);
