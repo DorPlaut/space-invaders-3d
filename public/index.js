@@ -15,6 +15,10 @@ import { isMobileDevice } from './utils.js';
 import gsap from 'gsap';
 import { GUI } from 'dat.gui';
 import { degToRad, radToDeg } from 'three/src/math/MathUtils.js';
+import { renderCustomShader } from './modules/background.js';
+
+// BACKGROUNd
+renderCustomShader();
 
 // SPACE INVADERS 3D
 // Game state
@@ -33,6 +37,7 @@ const camera = new THREE.PerspectiveCamera(
 const renderer = new THREE.WebGLRenderer();
 // Set up the scene, camera, and renderer
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x000000, 0);
 document.body.appendChild(renderer.domElement);
 // Update renderer size and camera aspect ratio on resize
 window.addEventListener('resize', () => {

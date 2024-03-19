@@ -449,17 +449,28 @@ class Enemy {
   };
 
   handleJumping = () => {
-    let interval;
+    // let interval;
+    // if (this.mesh.position.z >= 1) {
+    //   this.jumping = false;
+    //   interval = setTimeout(() => {
+    //     this.falling = true;
+    //   }, 2000);
+    // }
+    // if (this.mesh.position.z <= 0 && this.falling) {
+    //   clearInterval(interval);
+    //   this.jumping = false;
+    //   this.falling = false;
+    // }
     if (this.mesh.position.z >= 1) {
       this.jumping = false;
-      interval = setTimeout(() => {
+      // Start falling after a delay
+      setTimeout(() => {
         this.falling = true;
-      }, 2000);
+      }, 2000); // 2000 milliseconds delay
     }
     if (this.mesh.position.z <= 0 && this.falling) {
-      clearInterval(interval);
-      this.jumping = false;
       this.falling = false;
+      this.jumping = false;
     }
   };
 
@@ -494,21 +505,21 @@ class Enemy {
 
   update() {
     this.handleEnemyRotation();
-    // if (this.level.currentLevel == 2 && this.mesh.rotation.x < degToRad(45)) {
-    //   this.mesh.rotation.x += 0.1;
-    // }
-    // if (this.level.currentLevel == 3) {
-    //   if (this.mesh.rotation.x < degToRad(90)) this.mesh.rotation.x += 0.1;
-    //   this.handleJumping();
-    // }
+
     if (this.jumping) {
-      this.mesh.position.z += 0.1;
+      this.mesh.position.z += 0.1; // Increase z position while jumping
     }
     if (this.falling) {
-      this.mesh.position.z -= 0.1;
+      this.mesh.position.z -= 0.1; // Decrease z position while falling
     }
     if (this.level.currentLevel % 3 != 0) {
       this.clearJumpInterval();
+    }
+
+    // Ensure the enemy's z position is always within the expected range
+    if (this.mesh.position.z < 0) {
+      this.mesh.position.z = 0;
+      this.falling = false; // Ensure falling state is reset
     }
   }
 }

@@ -10,7 +10,7 @@
   font-size: 16px;
 }
 body {
-  background: black;
+  background: blue;
 }
 h1 {
   font-size: 3rem;
@@ -110,6 +110,8 @@ a:hover {
 
 /* score board-current session */
 #score-board {
+  background: rgb(24, 24, 24);
+
   pointer-events: none;
   position: absolute;
   bottom: 0;
@@ -124,6 +126,8 @@ a:hover {
 }
 /* score board - leaderboard */
 #leader-board {
+  background: rgb(24, 24, 24);
+
   pointer-events: none;
   position: absolute;
   top: 0;
