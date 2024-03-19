@@ -168,10 +168,8 @@ const createPlayer = () => {
 // LEVEL
 // level settings
 let currentLevel = 1;
-let levelX = 1;
-let levelY = 1;
-// let levelX = 5;
-// let levelY = 2;
+let levelX = 5;
+let levelY = 2;
 let levelSpeed = 2000;
 let level;
 // Strat level - create level and player and add them to the scene
