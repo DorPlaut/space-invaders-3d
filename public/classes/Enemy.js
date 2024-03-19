@@ -518,6 +518,7 @@ class Enemy {
 
     // Ensure the enemy's z position is always within the expected range
     if (this.mesh.position.z < 0) {
+      console.log('bring it down');
       this.mesh.position.z = 0;
       this.falling = false; // Ensure falling state is reset
     }

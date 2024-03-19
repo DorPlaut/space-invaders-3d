@@ -46,10 +46,6 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
-// Set the camera
-const cameraZAxis = isMobile ? 90 : 50;
-camera.position.set(0, 0, cameraZAxis + 100);
-camera.lookAt(0, 0, 0);
 
 // // add orbit controls
 // let controls = new OrbitControls(camera, renderer.domElement);
@@ -66,6 +62,10 @@ scene.add(light, light2, light3);
 scene.add(ambientLight);
 
 // camera aniamtions
+// Set the camera
+const cameraZAxis = isMobile ? 90 : 50;
+camera.position.set(0, 0, cameraZAxis + 100);
+camera.lookAt(0, 0, 0);
 
 let endCameraPosition;
 let endCameraRotation;
@@ -78,11 +78,19 @@ const handleAnimation = () => {
       endCameraRotation = { x: 0, y: 0, z: 0 };
       break;
     case 2: // Level 2
-      endCameraPosition = { x: 0, y: -30, z: cameraZAxis - 20 };
+      endCameraPosition = {
+        x: 0,
+        y: isMobile ? -60 : -30,
+        z: isMobile ? cameraZAxis - 30 : cameraZAxis - 20,
+      };
       endCameraRotation = { x: degToRad(45), y: 0, z: 0 };
       break;
     case 0: // Level 3
-      endCameraPosition = { x: 0, y: -40, z: 8 };
+      endCameraPosition = {
+        x: 0,
+        y: isMobile ? -60 : -40,
+        z: isMobile ? 11 : 8,
+      };
       endCameraRotation = { x: degToRad(80), y: 0, z: 0 };
       break;
     default:
@@ -181,8 +189,11 @@ const startNewGame = () => {
 // reset level settings to initial settings
 const resetLevelSettings = () => {
   currentLevel = 1;
-  levelX = 5;
-  levelY = 2;
+  levelX = 1;
+  levelY = 1;
+  // currentLevel = 1;
+  // levelX = 5;
+  // levelY = 2;
   levelSpeed = 2000;
 };
 // remove current level
