@@ -187,11 +187,9 @@ const startNewGame = () => {
 // reset level settings to initial settings
 const resetLevelSettings = () => {
   currentLevel = 1;
-  levelX = 1;
-  levelY = 1;
-  // currentLevel = 1;
-  // levelX = 5;
-  // levelY = 2;
+  levelX = 5;
+  levelY = 2;
+
   levelSpeed = 2000;
 };
 // remove current level
