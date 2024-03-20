@@ -448,17 +448,32 @@ class Enemy {
   };
 
   handleJumping = () => {
-    if (this.mesh.position.z >= 1) {
-      this.jumping = false;
-      this.fallTimeout = setTimeout(() => {
-        this.falling = true;
-      }, 2000);
+    if (this.jumping) {
+      if (this.mesh.position.z >= 1) {
+        this.jumping = false;
+        this.fallTimeout = setTimeout(() => {
+          this.falling = true;
+        }, 2000);
+      }
     }
-    if (this.mesh.position.z <= 0 && this.falling) {
-      clearInterval(this.fallTimeout);
-      this.jumping = false;
-      this.falling = false;
+
+    if (this.falling) {
+      if (this.mesh.position.z <= 0) {
+        clearInterval(this.fallTimeout);
+        this.falling = false;
+      }
     }
+    // if (this.mesh.position.z >= 1) {
+    //   this.jumping = false;
+    //   this.fallTimeout = setTimeout(() => {
+    //     this.falling = true;
+    //   }, 2000);
+    // }
+    // if (this.mesh.position.z <= 0 && this.falling) {
+    //   clearInterval(this.fallTimeout);
+    //   this.jumping = false;
+    //   this.falling = false;
+    // }
   };
 
   // trigger jumping randomly
@@ -498,6 +513,11 @@ class Enemy {
     }
     if (this.falling) {
       this.mesh.position.z -= 0.1; // Decrease z position while falling
+    }
+
+    if (this.mesh.position.z <= 0) {
+      this.jumping = false;
+      this.falling = false;
     }
 
     if (this.level.currentLevel % 3 != 0) {
