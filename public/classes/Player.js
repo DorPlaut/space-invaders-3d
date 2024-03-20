@@ -335,8 +335,24 @@ class Player {
           (this.targetRotationZ - this.mesh.rotation.z) *
           this.rotationLerpFactor;
         // move the player position
-        const posX = this.targetRotationZ / this.movmentSpeed;
-        this.mesh.position.x += posX;
+        const posX = this.mesh.position.x;
+        const moveInterval = this.targetRotationZ / this.movmentSpeed;
+        const maxMoveX = 10;
+        // console.log(posX);
+        // if (
+        //   this.mesh.position.x < maxMoveX &&
+        //   this.mesh.position.x > -maxMoveX
+        // ) {
+        //   this.mesh.position.x += moveInterval;
+        // }
+        // Calculate the new position
+        let newPos = this.mesh.position.x + moveInterval;
+
+        // Clamp the new position to the maxMoveX boundaries
+        newPos = Math.max(-maxMoveX, Math.min(newPos, maxMoveX));
+
+        // Update the player's position
+        this.mesh.position.x = newPos;
       } else {
         // Smoothly rotate back to 0
         this.mesh.rotation.z +=

@@ -174,11 +174,11 @@ let levelSpeed = 2000;
 let level;
 // Strat level - create level and player and add them to the scene
 const startNewGame = () => {
-  handleAnimation();
   resetLevelSettings();
   if (isMobile) handelMobile();
   level = new Level(camera, scene, levelX, levelY, levelSpeed, currentLevel);
   scene.add(level.mesh);
+  handleAnimation();
   createPlayer();
 };
 //
