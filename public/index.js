@@ -189,12 +189,10 @@ const resetLevelSettings = () => {
   currentLevel = 1;
   levelX = 5;
   levelY = 2;
-
   levelSpeed = 2000;
 };
 // remove current level
 const removeLevel = () => {
-  console.log(scene.children);
   scene.remove(level.mesh);
 };
 
@@ -230,7 +228,6 @@ const animate = () => {
     if (level.levelCleard) {
       // remove current level
       removeLevel();
-      // console.log(level);
 
       // if old level is removed, add new level with updated setting
       if (!scene.level) startLevel();
@@ -239,7 +236,7 @@ const animate = () => {
     // PLAYER
     player.update();
     // // check if player is dead
-    if (player.lives == 0) {
+    if (player.lives == 0 || level.mesh.position.y <= -6) {
       scene.clear();
       scene.add(light, light2, light3);
       scene.add(ambientLight);

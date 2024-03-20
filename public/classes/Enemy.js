@@ -23,15 +23,14 @@ class Enemy {
     // jumping
     this.jumping = false;
     this.falling = false;
-    this.jumpInterval;
+    this.jumpInterval = null;
+    this.fallTimeout = null;
 
     if (this.level.currentLevel % 3 == 0) {
       this.activateJumpTimer();
     } else {
       clearInterval(this.jumpInterval);
     }
-    // Start jump interval timer
-    // this.startJumpTimer();
   }
 
   createCollisionMesh(coords, pixelSize) {
@@ -449,28 +448,16 @@ class Enemy {
   };
 
   handleJumping = () => {
-    // let interval;
-    // if (this.mesh.position.z >= 1) {
-    //   this.jumping = false;
-    //   interval = setTimeout(() => {
-    //     this.falling = true;
-    //   }, 2000);
-    // }
-    // if (this.mesh.position.z <= 0 && this.falling) {
-    //   clearInterval(interval);
-    //   this.jumping = false;
-    //   this.falling = false;
-    // }
     if (this.mesh.position.z >= 1) {
       this.jumping = false;
-      // Start falling after a delay
-      setTimeout(() => {
+      this.fallTimeout = setTimeout(() => {
         this.falling = true;
-      }, 2000); // 2000 milliseconds delay
+      }, 2000);
     }
     if (this.mesh.position.z <= 0 && this.falling) {
-      this.falling = false;
+      clearInterval(this.fallTimeout);
       this.jumping = false;
+      this.falling = false;
     }
   };
 
@@ -512,15 +499,13 @@ class Enemy {
     if (this.falling) {
       this.mesh.position.z -= 0.1; // Decrease z position while falling
     }
+
     if (this.level.currentLevel % 3 != 0) {
       this.clearJumpInterval();
     }
-
-    // Ensure the enemy's z position is always within the expected range
-    if (this.mesh.position.z < 0) {
-      console.log('bring it down');
-      this.mesh.position.z = 0;
-      this.falling = false; // Ensure falling state is reset
+    if (this.gotHit) {
+      this.clearJumpInterval();
+      clearInterval(this.fallTimeout);
     }
   }
 }

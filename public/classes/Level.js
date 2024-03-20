@@ -133,14 +133,15 @@ class Level {
 
           moveRight = false;
           moveDown = false;
-          moveCounter++; // Increment counter
+          moveCounter++;
         }
         // If moving left and reached -range, move down and switch direction
         else if (!moveRight && centerX <= -range) {
           this.mesh.position.y -= 0.5;
           moveRight = true;
           moveDown = false;
-          moveCounter++; // Increment counter
+          moveCounter++;
+          // console.log(this.mesh.position.y);
         }
         // If not moving down, adjust x position based on direction
         else if (!moveDown) {
@@ -164,6 +165,10 @@ class Level {
   };
 
   update() {
+    // kill the player if enemies reach the player line
+    if (this.mesh.position.y <= -6) {
+      clearInterval(this.animationInterval);
+    }
     // Update bullets
     this.bullets.map((bullet, index) => {
       this.bullets[index].update();
@@ -179,12 +184,16 @@ class Level {
     // check if all the enemies are dead by checking if they have a mesh
     if (this.mesh.children.length == 0) {
       clearInterval(this.animationInterval);
+      // remove bullets
       this.bullets.map((bullet, index) => {
+        this.scene.remove(bullet.mesh);
+      });
+      // remove player bullets
+      this.player.bullets.map((bullet, index) => {
         this.scene.remove(bullet.mesh);
       });
       this.levelCleard = true;
     }
-    // if (this.player) console.log(this.player.bullets);
     this.enemies.map((enemy, index) => {
       this.enemies[index].update();
       this.enemies[index].pixelArt.update();

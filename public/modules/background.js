@@ -83,11 +83,11 @@ export const renderCustomShader = async () => {
   });
 
   // Handle mouse move to update mouse position
-  window.addEventListener('mousemove', (event) => {
-    const mousePosition = new THREE.Vector2(
-      (event.clientX / window.innerWidth) * 2 - 1,
-      -(event.clientY / window.innerHeight) * 2 + 1
-    );
-    customMaterial.uniforms.u_mouse.value.copy(mousePosition);
-  });
+  // window.addEventListener('mousemove', (event) => {
+  //   const mousePosition = new THREE.Vector2(
+  //     (event.clientX / window.innerWidth) * 2 - 1,
+  //     -(event.clientY / window.innerHeight) * 2 + 1
+  //   );
+  //   customMaterial.uniforms.u_mouse.value.copy(mousePosition);
+  // });
 };
