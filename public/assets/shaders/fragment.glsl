@@ -2,8 +2,8 @@
 
  uniform float u_time;
  uniform vec2 u_resolution;
- uniform vec2 u_mouse;
- varying vec2 vUv;
+//  uniform vec2 u_mouse;
+//  varying vec2 vUv;
 
 
 void main(){
@@ -13,7 +13,7 @@ void main(){
     vec2 center = vec2(0.5, 0.5); // Center of the screen
     float radius = distance(uv, center); // Distance from the center
     // create fish eye effect
-    float fishEyeFactor = -0.1;
+    float fishEyeFactor = -0.2 ;
     uv = uv + (uv - center) * (radius * fishEyeFactor);
     // convertthe uv to a square
     vec2 squareUV = uv * vec2(u_resolution.x / u_resolution.y, 1.0);\
