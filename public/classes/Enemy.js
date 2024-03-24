@@ -30,6 +30,9 @@ class Enemy {
       this.activateJumpTimer();
     } else {
       clearInterval(this.jumpInterval);
+      clearInterval(this.fallTimeout);
+      this.jumpInterval = null;
+      this.fallTimeout = null;
     }
   }
 
@@ -448,9 +451,21 @@ class Enemy {
   };
 
   handleJumping = () => {
+    if (this.jumping && this.mesh.position.z !== 1 && !this.falling) {
+      this.mesh.position.z += 0.1; // Increase z position while jumping
+    }
+    if (this.falling && this.mesh.position.z !== 0 && !this.jumping) {
+      this.mesh.position.z -= 0.1; // Decrease z position while falling
+    }
+    if (this.jumping && this.falling) {
+      this.jumping = false;
+      this.falling = true;
+    }
+
     if (this.jumping) {
       if (this.mesh.position.z >= 1) {
         this.jumping = false;
+
         this.fallTimeout = setTimeout(() => {
           this.falling = true;
         }, 2000);
@@ -463,25 +478,13 @@ class Enemy {
         this.falling = false;
       }
     }
-    // if (this.mesh.position.z >= 1) {
-    //   this.jumping = false;
-    //   this.fallTimeout = setTimeout(() => {
-    //     this.falling = true;
-    //   }, 2000);
-    // }
-    // if (this.mesh.position.z <= 0 && this.falling) {
-    //   clearInterval(this.fallTimeout);
-    //   this.jumping = false;
-    //   this.falling = false;
-    // }
   };
 
   // trigger jumping randomly
   activateJumpTimer = () => {
     this.jumpInterval = setInterval(() => {
-      console.log('jump');
       this.jumping = true;
-    }, Math.floor(Math.random() * 10000) + 1000);
+    }, Math.floor(Math.random() * 15000) + 2000);
   };
   // clear jumpInterval
   clearJumpInterval() {
@@ -508,24 +511,11 @@ class Enemy {
   update() {
     this.handleEnemyRotation();
 
-    if (this.jumping) {
-      this.mesh.position.z += 0.1; // Increase z position while jumping
-    }
-    if (this.falling) {
-      this.mesh.position.z -= 0.1; // Decrease z position while falling
-    }
-
-    if (this.mesh.position.z <= 0) {
-      this.jumping = false;
-      this.falling = false;
-    }
-
-    if (this.level.currentLevel % 3 != 0) {
-      this.clearJumpInterval();
-    }
     if (this.gotHit) {
-      this.clearJumpInterval();
+      clearInterval(this.jumpInterval);
       clearInterval(this.fallTimeout);
+      this.jumpInterval = null;
+      this.fallTimeout = null;
     }
   }
 }

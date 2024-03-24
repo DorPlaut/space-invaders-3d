@@ -88,8 +88,8 @@ const handleAnimation = () => {
     case 0: // Level 3
       endCameraPosition = {
         x: 0,
-        y: isMobile ? -60 : -40,
-        z: isMobile ? 11 : 8,
+        y: isMobile ? -90 : -40,
+        z: isMobile ? 17 : 8,
       };
       endCameraRotation = { x: degToRad(80), y: 0, z: 0 };
       break;

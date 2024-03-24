@@ -37,9 +37,11 @@ class Bullet {
   }
 
   update() {
-    if (this.hasCollided) return;
-    // move bullet
-    if (this.type == 'player') this.mesh.position.y += this.speed;
+    if (this.hasCollided || this.level.mesh.children.length == 0) return;
+
+    if (this.type == 'player')
+      // move bullet
+      this.mesh.position.y += this.speed;
     if (this.type == 'enemy') this.mesh.position.y -= this.speed * 0.5;
     // Update raycaster
     this.raycaster.set(
