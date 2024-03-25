@@ -15,7 +15,11 @@ import { isMobileDevice } from './utils.js';
 import gsap from 'gsap';
 import { GUI } from 'dat.gui';
 import { degToRad, radToDeg } from 'three/src/math/MathUtils.js';
-import { renderCustomShader } from './modules/background.js';
+import {
+  renderCustomShader,
+  updatePlayer,
+  updateLevel,
+} from './modules/background.js';
 
 // BACKGROUNd
 renderCustomShader();
@@ -162,6 +166,7 @@ const createPlayer = () => {
     player.mesh.position.set(0, -6, 0);
     scene.add(mesh);
     level.player = player;
+    updatePlayer(player);
   });
 };
 
@@ -178,6 +183,7 @@ const startNewGame = () => {
   if (isMobile) handelMobile();
   level = new Level(camera, scene, levelX, levelY, levelSpeed, currentLevel);
   scene.add(level.mesh);
+  updateLevel(level);
   handleAnimation();
   createPlayer();
 };
@@ -211,6 +217,8 @@ const startLevel = () => {
   // level.animate();
   scene.add(level.mesh);
   level.player = player;
+  updateLevel(level);
+
   // update player data
   player.level = level;
 };

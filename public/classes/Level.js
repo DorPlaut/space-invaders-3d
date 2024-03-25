@@ -25,6 +25,8 @@ class Level {
     this.addEnemies();
     this.centerX = null;
 
+    this.centerPositionOnScreen = new THREE.Vector2();
+
     // level logic
     this.levelCleard = false;
 
@@ -164,7 +166,30 @@ class Level {
     }
   };
 
+  // update position on screen
+  updateScreenPosition() {
+    if (this.mesh) {
+      // calculate the bounding box of the mesh
+      const box = new THREE.Box3().setFromObject(this.mesh);
+      // get the center of the bounding box
+      const center = new THREE.Vector3();
+      box.getCenter(center);
+
+      // convert position to screen position
+      const screenPosition = center.clone();
+      this.mesh.updateMatrixWorld(); // Ensure the mesh's world matrix is up-to-date
+      screenPosition.project(this.camera);
+
+      // update the center position on screen
+      this.centerPositionOnScreen.x =
+        ((screenPosition.x + 1) / 2) * window.innerWidth;
+      this.centerPositionOnScreen.y =
+        ((-screenPosition.y + 1) / 2) * window.innerHeight;
+    }
+  }
+
   update() {
+    this.updateScreenPosition();
     // kill the player if enemies reach the player line
     if (this.mesh.position.y <= -6) {
       clearInterval(this.animationInterval);

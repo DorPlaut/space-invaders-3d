@@ -12,6 +12,8 @@ class Player {
     this.collisionMesh = null;
     this.mesh = null;
     this.position = new THREE.Vector3(0, 0, 0);
+    // screen position
+    this.positionOnScreen = new THREE.Vector2();
     // Load the model
     this.loadModel(onModelLoaded);
     // handle movment
@@ -326,9 +328,24 @@ class Player {
     }
   }
 
+  //
+  updateScreenPosition() {
+    if (this.mesh) {
+      const screenPosition = new THREE.Vector3();
+      this.mesh.updateMatrixWorld(); // Ensure the mesh's world matrix is up-to-date
+      screenPosition.setFromMatrixPosition(this.mesh.matrixWorld);
+      screenPosition.project(this.camera);
+      this.positionOnScreen.x =
+        ((screenPosition.x + 1) / 2) * window.innerWidth;
+      this.positionOnScreen.y =
+        ((-screenPosition.y + 1) / 2) * window.innerHeight;
+    }
+  }
+
   update() {
     if (this.mesh) {
       this.updateLifebarPosition();
+      this.updateScreenPosition();
       if (this.isRotating) {
         // Smoothly rotate towards the target rotation
         this.mesh.rotation.z +=

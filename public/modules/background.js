@@ -1,5 +1,14 @@
 import * as THREE from 'three';
 
+let player;
+let level;
+
+export const updatePlayer = (element) => {
+  player = element;
+};
+export const updateLevel = (element) => {
+  level = element;
+};
 // Function to create and render the scene with custom fragment shader
 export const renderCustomShader = async () => {
   const fragmentShaderCode = await fetch('/assets/shaders/fragment.glsl')
@@ -19,16 +28,19 @@ export const renderCustomShader = async () => {
   const scene = new THREE.Scene();
 
   // Geometry
-  const geometry = new THREE.BufferGeometry();
-  const vertices = new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]);
-  geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+  // const geometry = new THREE.BufferGeometry();
+  // const vertices = new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]);
+  // geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+  const geometry = new THREE.PlaneGeometry(2, 2); // Square geometry
 
   // Custom shader material
   const customMaterial = new THREE.ShaderMaterial({
     uniforms: {
       u_time: { value: 0.0 },
       u_resolution: { value: new THREE.Vector2() },
-      u_mouse: { value: new THREE.Vector2() }, // Mouse position uniform
+      u_mouse: { value: new THREE.Vector2() },
+      u_player: { value: new THREE.Vector2() },
+      u_level: { value: new THREE.Vector2() },
     },
     vertexShader: `
             varying vec2 vUv;
@@ -57,6 +69,25 @@ export const renderCustomShader = async () => {
   // Render loop
   function animate(time) {
     requestAnimationFrame(animate);
+    if (player) {
+      const playerPosition = new THREE.Vector2(
+        (player.positionOnScreen.x / window.innerWidth) * 2 - 1,
+        -(player.positionOnScreen.y / window.innerHeight) * 2 + 1
+      );
+      customMaterial.uniforms.u_player.value.copy(playerPosition);
+      // console.log(playerPosition);
+    }
+    //
+    if (level) {
+      const levelPosition = new THREE.Vector2(
+        (level.centerPositionOnScreen.x / window.innerWidth) * 2 - 1,
+        -(level.centerPositionOnScreen.y / window.innerHeight) * 2 + 1
+      );
+      customMaterial.uniforms.u_level.value.copy(levelPosition);
+      // console.log(playerPosition);
+    }
+
+    //
 
     customMaterial.uniforms.u_time.value = time / 1000; // Update time uniform
     customMaterial.uniforms.u_resolution.value.x = window.innerWidth; // Update resolution uniform
@@ -74,11 +105,11 @@ export const renderCustomShader = async () => {
   });
 
   // Handle mouse move to update mouse position
-  // window.addEventListener('mousemove', (event) => {
-  //   const mousePosition = new THREE.Vector2(
-  //     (event.clientX / window.innerWidth) * 2 - 1,
-  //     -(event.clientY / window.innerHeight) * 2 + 1
-  //   );
-  //   customMaterial.uniforms.u_mouse.value.copy(mousePosition);
-  // });
+  window.addEventListener('mousemove', (event) => {
+    const mousePosition = new THREE.Vector2(
+      (event.clientX / window.innerWidth) * 2 - 1,
+      -(event.clientY / window.innerHeight) * 2 + 1
+    );
+    customMaterial.uniforms.u_mouse.value.copy(mousePosition);
+  });
 };
