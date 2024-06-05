@@ -40,7 +40,6 @@ export const showGameOverMenu = async (handlePlayBtn, score) => {
         ><br />
         <input type="text" id="player-name-input" />
       </form>
-      <br />
 
       <button class="btn" id="submit-btn">Submit Score</button>
       <button id="start-btn" class="btn">Play again</button>
@@ -103,10 +102,10 @@ export const createScoreBoards = async (score) => {
   highestScoreContainer.id = 'leader-board';
   highestScoreContainer.innerHTML = `
     <p >Highest Score: <br/> <span id="highest-score">Loading...</span></p>
-    <button class="btn"  id="toggle-btn"><i class="fa-solid fa-angles-down"></i></button>
+ <button class="btn"  id="toggle-btn">Show top 5</button>
  `;
   document.body.appendChild(highestScoreContainer);
-
+  // <button class="btn"  id="toggle-btn"><i class="fa-solid fa-angles-down"></i></button>
   //
 
   // Fetch highest score from server
