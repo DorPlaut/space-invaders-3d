@@ -19,6 +19,7 @@ import {
   renderCustomShader,
   updatePlayer,
   updateLevel,
+  updateAnimationSpeed,
 } from './modules/background.js';
 
 // BACKGROUNd
@@ -115,6 +116,12 @@ const animateCamera = (endPosition, endRotation) => {
     z: endPosition.z,
     duration: duration,
     ease: easing,
+    onStart: () => {
+      updateAnimationSpeed(300);
+    },
+    onComplete: () => {
+      updateAnimationSpeed(2000);
+    },
   });
 
   gsap.to(camera.rotation, {
@@ -232,6 +239,7 @@ const animate = () => {
     if (score != player.score) updateScore(player.score);
     // LEVEL
     level.update();
+
     // Check if the current level is cleared
     if (level.levelCleard) {
       // remove current level

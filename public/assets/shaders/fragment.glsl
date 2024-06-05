@@ -140,7 +140,8 @@ void main(){
     // Modulate the noise value based on the distance to the sphere
 // float blendValue = insidePlayer;
 float blendValue = max(insideLevel, insidePlayer);
-    float modulatedNoiseValue = blendValue * noiseValue;
+    float modulatedNoiseValue = insidePlayer * noiseValue;
+    // float modulatedNoiseValue = blendValue * noiseValue;
     
     // Calculate the grid lines, applying the noise modulation only inside the sphere
      gridX = step(fract(animatedX * gridSize + modulatedNoiseValue), 0.03);
@@ -153,7 +154,7 @@ float blendValue = max(insideLevel, insidePlayer);
     vec3 backgroundColor = vec3(0.0, 0.0, 0.0);
 
         vec3 finalGridColor = mix(gridColor, playerSphereColor, insidePlayer);
-    finalGridColor = mix(finalGridColor, levelSphereColor, insideLevel);
+    // finalGridColor = mix(finalGridColor, levelSphereColor, insideLevel);
 
 
     // Combine the grid lines, sphere, and background

@@ -1,7 +1,11 @@
+import gsap from 'gsap';
 import * as THREE from 'three';
 
 let player;
 let level;
+let animationSpeed = 2000;
+let animationSpeedObject = { value: animationSpeed };
+let lastFrameTime = performance.now(); // Initialize the last frame time
 
 export const updatePlayer = (element) => {
   player = element;
@@ -9,6 +13,18 @@ export const updatePlayer = (element) => {
 export const updateLevel = (element) => {
   level = element;
 };
+
+// update animation speed
+
+export const updateAnimationSpeed = (targetSpeed) => {
+  const duration = 1;
+  gsap.to(animationSpeedObject, {
+    value: targetSpeed,
+    duration: duration,
+    ease: 'easeInOutCubic',
+  });
+};
+
 // Function to create and render the scene with custom fragment shader
 export const renderCustomShader = async () => {
   const fragmentShaderCode = await fetch('/assets/shaders/fragment.glsl')
@@ -29,8 +45,6 @@ export const renderCustomShader = async () => {
 
   // Geometry
   // const geometry = new THREE.BufferGeometry();
-  // const vertices = new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]);
-  // geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
   const geometry = new THREE.PlaneGeometry(2, 2); // Square geometry
 
   // Custom shader material
@@ -69,6 +83,10 @@ export const renderCustomShader = async () => {
   // Render loop
   function animate(time) {
     requestAnimationFrame(animate);
+    //
+    const elapsedTime = (time - lastFrameTime) / 2000; // Time in seconds
+    lastFrameTime = time;
+    //
     if (player) {
       const playerPosition = new THREE.Vector2(
         (player.positionOnScreen.x / window.innerWidth) * 2 - 1,
@@ -79,17 +97,20 @@ export const renderCustomShader = async () => {
     }
     //
     if (level) {
+      // set the level position
       const levelPosition = new THREE.Vector2(
         (level.centerPositionOnScreen.x / window.innerWidth) * 2 - 1,
         -(level.centerPositionOnScreen.y / window.innerHeight) * 2 + 1
       );
       customMaterial.uniforms.u_level.value.copy(levelPosition);
-      // console.log(playerPosition);
     }
 
     //
+    customMaterial.uniforms.u_time.value +=
+      elapsedTime / (animationSpeedObject.value / 1000);
+    console.log(animationSpeedObject.value);
 
-    customMaterial.uniforms.u_time.value = time / 1000; // Update time uniform
+    // customMaterial.uniforms.u_time.value = time / animationSpeedObject.value; // Update time uniform
     customMaterial.uniforms.u_resolution.value.x = window.innerWidth; // Update resolution uniform
     customMaterial.uniforms.u_resolution.value.y = window.innerHeight;
 
