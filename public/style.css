@@ -185,6 +185,9 @@ input:focus {
   font-size: 0.8rem;
   margin: 0.2rem;
 }
+.score {
+  color: red;
+}
 
 #toggle-btn {
   /* width: 2rem;
