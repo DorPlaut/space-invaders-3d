@@ -17,10 +17,13 @@
   font-weight: normal;
   font-style: normal;
 }
+html {
+  background: black;
+}
 body {
   font-family: 'CustomFont', sans-serif;
   opacity: 0;
-  animation: fade-in 1s ease-in forwards;
+  animation: fade-in 2s ease-in forwards;
 }
 h1 {
   font-size: 2.5rem;
@@ -117,6 +120,9 @@ a:hover {
 
 .menu-content {
   margin: 1rem;
+}
+#how_to {
+  font-size: 0.7rem;
 }
 #start-btn {
   margin-top: 1.5rem;

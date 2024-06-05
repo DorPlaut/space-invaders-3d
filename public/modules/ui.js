@@ -10,7 +10,9 @@ export const showMainMenu = (handlePlayBtn) => {
       <p>
         Welcom to Space invaders 3D, a 3D shooter inspirde by the retro classic
         build with Three.JS
-      </p>
+        <br/>
+        <span id='how_to'>How to play : use your A/left and D/right keys to move and E/spacebar to shoot. have fun :)</span>
+        </p>
       <button id="start-btn" class="btn">Play</button>
     </div>
     <span
