@@ -184,9 +184,9 @@ input:focus {
   text-align: center;
   font-size: 0.8rem;
   margin: 0.2rem;
+  width: 100%;
 }
 .score {
-  color: red;
   display: flex;
   justify-content: space-between;
 }
