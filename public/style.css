@@ -187,6 +187,8 @@ input:focus {
 }
 .score {
   color: red;
+  display: flex;
+  justify-content: space-between;
 }
 
 #toggle-btn {

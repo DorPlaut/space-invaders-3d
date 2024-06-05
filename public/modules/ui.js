@@ -123,9 +123,9 @@ export const createScoreBoards = async (score) => {
     .slice(0, 5)
     .map(
       (score) =>
-        `<div class="score">${score.player_name} - ${score.score}</div>`
+        `<div class="score"><span>${score.player_name}</span> <span>-</span> <span>${score.score}</span></div>`
     )
-    .join('<br>');
+    .join('');
 
   // Toggle button functionality
   const toggleBtn = document.getElementById('toggle-btn');
