@@ -101,7 +101,7 @@ export const createScoreBoards = async (score) => {
   const highestScoreContainer = document.createElement('div');
   highestScoreContainer.id = 'leader-board';
   highestScoreContainer.innerHTML = `
-    <p >Highest Score: <br/> <span id="highest-score">Loading...</span></p>
+    <p >Highest Score: <br/> </p> <span id="highest-score">Loading...</span>
  <button class="btn"  id="toggle-btn">Show top 5</button>
  `;
   document.body.appendChild(highestScoreContainer);
@@ -113,7 +113,7 @@ export const createScoreBoards = async (score) => {
   const highestScoreElement = document.getElementById('highest-score');
   highestScoreElement.textContent = highestScoreData
     ? `${highestScoreData.player_name} - ${highestScoreData.score}`
-    : 'N/A';
+    : 'Error';
 
   // Fetch full scores list
   const scoresList = await getScores();
@@ -125,14 +125,14 @@ export const createScoreBoards = async (score) => {
   // Toggle button functionality
   const toggleBtn = document.getElementById('toggle-btn');
   toggleBtn.addEventListener('click', () => {
-    if (toggleBtn.innerHTML === '<i class="fa-solid fa-angles-down"></i>') {
+    if (toggleBtn.innerHTML === 'Show top 5') {
       highestScoreElement.innerHTML = top5Scores;
-      toggleBtn.innerHTML = '<i class="fa-solid fa-angles-up"></i>';
+      toggleBtn.innerHTML = 'Show top 1';
     } else {
       highestScoreElement.textContent = highestScoreData
         ? `${highestScoreData.player_name} - ${highestScoreData.score}`
-        : 'N/A';
-      toggleBtn.innerHTML = '<i class="fa-solid fa-angles-down"></i>';
+        : 'Error';
+      toggleBtn.innerHTML = 'Show top 5';
     }
   });
 };
