@@ -114,14 +114,17 @@ export const createScoreBoards = async (score) => {
   const highestScoreData = await getHighScore();
   const highestScoreElement = document.getElementById('highest-score');
   highestScoreElement.textContent = highestScoreData
-    ? `<span class='score'>${highestScoreData.player_name} - ${highestScoreData.score}</span>`
+    ? `${highestScoreData.player_name} - ${highestScoreData.score}`
     : 'Error';
 
   // Fetch full scores list
   const scoresList = await getScores();
   const top5Scores = scoresList
     .slice(0, 5)
-    .map((score) => `${score.player_name} - ${score.score}`)
+    .map(
+      (score) =>
+        `<div class="score">${score.player_name} - ${score.score}</div>`
+    )
     .join('<br>');
 
   // Toggle button functionality
