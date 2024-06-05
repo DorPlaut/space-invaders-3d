@@ -180,6 +180,9 @@ input:focus {
   border-right: solid white 2px;
   margin: 0 1rem;
 }
+#highest-score {
+  text-align: center;
+}
 
 #toggle-btn {
   /* width: 2rem;
