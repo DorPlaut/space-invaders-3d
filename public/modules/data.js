@@ -1,5 +1,5 @@
-const serverUrl = 'http://localhost:3000/api';
-// const serverUrl = 'https://space-invaders-3d.vercel.app/api';
+// const serverUrl = 'http://localhost:3000/api';
+const serverUrl = 'https://space-invaders-3d.vercel.app/api';
 
 export const getScores = async () => {
   // const serverUrl = 'https://space-invaders-3d.vercel.app/api';
