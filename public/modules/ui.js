@@ -114,7 +114,7 @@ export const createScoreBoards = async (score) => {
   const highestScoreData = await getHighScore();
   const highestScoreElement = document.getElementById('highest-score');
   highestScoreElement.textContent = highestScoreData
-    ? `${highestScoreData.player_name} - ${highestScoreData.score}`
+    ? `<div class="score"><span>${highestScoreData.player_name}</span> <span>-</span> <span>${highestScoreData.score}</span></div>`
     : 'Error';
 
   // Fetch full scores list

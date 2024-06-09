@@ -108,7 +108,6 @@ export const renderCustomShader = async () => {
     //
     customMaterial.uniforms.u_time.value +=
       elapsedTime / (animationSpeedObject.value / 1000);
-    console.log(animationSpeedObject.value);
 
     // customMaterial.uniforms.u_time.value = time / animationSpeedObject.value; // Update time uniform
     customMaterial.uniforms.u_resolution.value.x = window.innerWidth; // Update resolution uniform
