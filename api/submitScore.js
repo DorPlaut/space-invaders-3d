@@ -1,7 +1,7 @@
 import connectDB from './db';
 import Score from './models/Score';
 
-const getHighestScore = async (req, res) => {
+const submitScore = async (req, res) => {
   try {
     // Connect to MongoDB
     await connectDB(process.env.MONGO_URI);
@@ -23,4 +23,4 @@ const getHighestScore = async (req, res) => {
   }
 };
 
-export default getHighestScore;
+export default submitScore;
