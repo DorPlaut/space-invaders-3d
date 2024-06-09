@@ -113,7 +113,7 @@ export const createScoreBoards = async (score) => {
   // Fetch highest score from server
   const highestScoreData = await getHighScore();
   const highestScoreElement = document.getElementById('highest-score');
-  highestScoreElement.textContent = highestScoreData
+  highestScoreElement.innerHTML = highestScoreData
     ? `<div class="score"><span>${highestScoreData.player_name}</span> <span>-</span> <span>${highestScoreData.score}</span></div>`
     : 'Error';
 
@@ -134,8 +134,8 @@ export const createScoreBoards = async (score) => {
       highestScoreElement.innerHTML = top5Scores;
       toggleBtn.innerHTML = 'Show top 1';
     } else {
-      highestScoreElement.textContent = highestScoreData
-        ? `${highestScoreData.player_name} - ${highestScoreData.score}`
+      highestScoreElement.innerHTML = highestScoreData
+        ? `<div class="score"><span>${highestScoreData.player_name}</span> <span>-</span> <span>${highestScoreData.score}</span></div>`
         : 'Error';
       toggleBtn.innerHTML = 'Show top 5';
     }
