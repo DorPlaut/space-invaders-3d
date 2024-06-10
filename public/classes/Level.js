@@ -126,9 +126,7 @@ class Level {
         // move
         const centerX = this.centerX + this.mesh.position.x;
         const range = 2;
-        //
 
-        //
         // change side and move down
         if (moveRight && centerX >= range) {
           this.mesh.position.y -= 0.5;
@@ -158,6 +156,7 @@ class Level {
         if (moveCounter >= 2) {
           moveCounter = 0;
         }
+        console.log(this.animationInterval);
       }, this.speed);
     }
     if (!this.isAnimated) {

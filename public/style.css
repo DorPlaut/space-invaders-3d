@@ -86,17 +86,16 @@ a:hover {
   align-items: center;
 }
 
-.control-btn,
-#toggle-btn {
-  /* font-size: 2rem; */
-  /* border-radius: 50%;
+.control-btn {
+  font-size: 2rem;
+  border-radius: 50%;
   border: none;
   width: 4.7rem;
   height: 4.7rem;
   margin: 0.5rem;
   display: flex;
   justify-content: center;
-  align-items: center; */
+  align-items: center;
 }
 .control-btn:hover {
   background: rgb(190, 190, 190);
