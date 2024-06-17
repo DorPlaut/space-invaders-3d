@@ -47,6 +47,16 @@ export const renderCustomShader = async () => {
   // const geometry = new THREE.BufferGeometry();
   const geometry = new THREE.PlaneGeometry(2, 2); // Square geometry
 
+  // Load the texture
+  const textureLoader = new THREE.TextureLoader();
+  const texture = textureLoader.load(
+    '/assets/shaders/textures/uniformclouds-1.jpg'
+  );
+  // Set the texture to repeat
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  // texture.repeat.set(1, 1);
+
   // Custom shader material
   const customMaterial = new THREE.ShaderMaterial({
     uniforms: {
@@ -55,6 +65,7 @@ export const renderCustomShader = async () => {
       u_mouse: { value: new THREE.Vector2() },
       u_player: { value: new THREE.Vector2() },
       u_level: { value: new THREE.Vector2() },
+      tex: { value: texture },
     },
     vertexShader: `
             varying vec2 vUv;
@@ -125,10 +136,18 @@ export const renderCustomShader = async () => {
   });
 
   // Handle mouse move to update mouse position
+  //   window.addEventListener('mousemove', (event) => {
+  //     const mousePosition = new THREE.Vector2(
+  //       (event.clientX / window.innerWidth) * 2 - 1,
+  //       -(event.clientY / window.innerHeight) * 2 + 1
+  //     );
+  //     customMaterial.uniforms.u_mouse.value.copy(mousePosition);
+  //   });
   window.addEventListener('mousemove', (event) => {
+    // Calculate mouse position in pixels relative to the canvas
     const mousePosition = new THREE.Vector2(
-      (event.clientX / window.innerWidth) * 2 - 1,
-      -(event.clientY / window.innerHeight) * 2 + 1
+      event.clientX,
+      window.innerHeight - event.clientY - 1 // Flip Y coordinate to match GLSL coordinate system
     );
     customMaterial.uniforms.u_mouse.value.copy(mousePosition);
   });

@@ -97,7 +97,7 @@ void main(){
     // convert the uv to a square
     vec2 squareUV = uv * vec2(u_resolution.x / u_resolution.y, 1.0);
     // Calculate the grid size based on the resolution
-    float gridSize = min(u_resolution.x, u_resolution.y) / 80.0; // Adjust the divisor to change the grid size
+    float gridSize = min(u_resolution.x, u_resolution.y) / 40.0; // Adjust the divisor to change the grid size
     gridSize = floor(gridSize);
     // Animate the grid 
     float animatedY = squareUV.y + u_time * 0.2;
