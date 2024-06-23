@@ -157,7 +157,7 @@ export const updateScore = (score) => {
 };
 
 // update score board and leaderboard
-export const updateScoreBoards = (score) => {
+export const updateScoreBoards = async (score) => {
   // remove old score board
   const oldScoreBoard = document.getElementById('score-board');
   if (oldScoreBoard) {
@@ -165,7 +165,7 @@ export const updateScoreBoards = (score) => {
   }
 
   // create updated score board
-  createScoreBoards(score);
+  await createScoreBoards(score);
 };
 
 export const createButton = (
