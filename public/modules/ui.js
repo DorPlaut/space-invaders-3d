@@ -36,7 +36,7 @@ export const showGameOverMenu = async (handlePlayBtn, score) => {
    <h1>Game Over</h1>
     <div class="menu-content">
       <h2>Your score is ${score}</h2>
-      <form action="">
+      <form action="" id="score-form">
         <span
           >Please enter your name to submit your score to the score board</span
         ><br />
@@ -68,6 +68,7 @@ export const showGameOverMenu = async (handlePlayBtn, score) => {
     // Check if the player entered a name
     if (!playerName.trim()) {
       alert('Please enter your name before submitting the score.');
+
       return;
     }
 
@@ -81,6 +82,10 @@ export const showGameOverMenu = async (handlePlayBtn, score) => {
 
       if (response) {
         alert('Score submitted successfully!');
+        // Hide the form after successful submission
+        document.getElementById('score-form').style.display = 'none';
+        document.getElementById('submit-btn').style.display = 'none';
+        updateScoreBoards();
       } else {
         alert('Failed to submit score. Please try again.');
       }
@@ -145,30 +150,22 @@ export const createScoreBoards = async (score) => {
 const leftIconClass = 'fa-arrow-down';
 const rightIconClass = 'fa-arrow-up';
 
-// export const createScoreBoards = async (score) => {
-//   // current game score board
-//   const scoreBoard = document.createElement('div');
-//   scoreBoard.id = 'score-board';
-//   scoreBoard.innerHTML = `<p>Score : ${score}</p>`;
-//   document.body.appendChild(scoreBoard);
-//   // all time score board
-//   const highestScoreContainer = document.createElement('div');
-//   highestScoreContainer.innerHTML =
-//     '<p id="leader-board">Highest Score: <span id="highest-score" >Loading...</span></p>';
-//   document.body.appendChild(highestScoreContainer);
-
-//   // Fetch highest score from server
-//   const highestScoreData = await getHighScore();
-//   const highestScoreElement = document.getElementById('highest-score');
-//   highestScoreElement.textContent = highestScoreData
-//     ? `${highestScoreData.player_name} - ${highestScoreData.score}`
-//     : 'N/A';
-// };
-
-// Update score board
+// Update corrent score
 export const updateScore = (score) => {
   const scoreBoard = document.getElementById('score-board');
   scoreBoard.innerHTML = `<p>Score : ${score}</p>`;
+};
+
+// update score board and leaderboard
+export const updateScoreBoards = (score) => {
+  // remove old score board
+  const oldScoreBoard = document.getElementById('score-board');
+  if (oldScoreBoard) {
+    oldScoreBoard.remove();
+  }
+
+  // create updated score board
+  createScoreBoards(score);
 };
 
 export const createButton = (
