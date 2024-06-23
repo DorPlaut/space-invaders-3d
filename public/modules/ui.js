@@ -85,7 +85,6 @@ export const showGameOverMenu = async (handlePlayBtn, score) => {
         // Hide the form after successful submission
         document.getElementById('score-form').style.display = 'none';
         document.getElementById('submit-btn').style.display = 'none';
-        updateScoreBoards();
       } else {
         alert('Failed to submit score. Please try again.');
       }
@@ -156,16 +155,13 @@ export const updateScore = (score) => {
   scoreBoard.innerHTML = `<p>Score : ${score}</p>`;
 };
 
-// update score board and leaderboard
-export const updateScoreBoards = async (score) => {
+// rmove old score board
+export const removeScoreBoards = () => {
   // remove old score board
   const oldScoreBoard = document.getElementById('score-board');
   if (oldScoreBoard) {
     oldScoreBoard.remove();
   }
-
-  // create updated score board
-  await createScoreBoards(score);
 };
 
 export const createButton = (

@@ -10,6 +10,7 @@ import {
   createMobileBtns,
   createButton,
   removeMobileBtns,
+  removeScoreBoards,
 } from './modules/ui.js';
 import { isMobileDevice } from './utils.js';
 import gsap from 'gsap';
